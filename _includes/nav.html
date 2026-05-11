@@ -1,89 +1,144 @@
 <style>
-    /* 導覽列外部容器 */
-    .iso-nav {
-        background-color: #121212; /* 極致深色背景 */
-        border-bottom: 5px solid #ffcc00; /* 消防警戒黃底線 */
-        padding: 15px 20px;
+    /* 全域設定 */
+    :root {
+        --hcfd-red: #e74c3c;
+        --hcfd-yellow: #ffcc00;
+        --dark-bg: #121212;
+        --menu-bg: #1e1e1e;
+    }
+
+    /* 頂部導覽列容器 */
+    .iso-header {
+        background-color: var(--dark-bg);
+        border-bottom: 3px solid var(--hcfd-yellow);
+        height: 60px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        font-family: "Microsoft JhengHei", "Helvetica Neue", sans-serif;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        border-radius: 0 0 8px 8px; /* 底部微圓角 */
-        margin-bottom: 25px;
+        padding: 0 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
 
-    /* 系統品牌名稱 (HCFD ISO) */
-    .iso-brand {
-        color: #ffcc00;
-        font-size: 1.4rem;
-        font-weight: 900;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin: 0;
-    }
-
-    /* 選單列表 */
-    .iso-menu {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        gap: 12px;
-    }
-
-    /* 按鈕設計 */
-    .iso-menu li a {
-        display: inline-block;
+    /* 網頁名稱標題 */
+    .iso-title {
         color: #ffffff;
-        background-color: #2a2a2a; /* 深灰按鈕底色 */
-        text-decoration: none;
+        font-size: 1.2rem;
         font-weight: bold;
-        font-size: 1.1rem;
-        padding: 12px 20px;
-        border-radius: 6px;
-        border: 1px solid #444;
-        transition: all 0.2s ease-in-out;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    /* 點擊與滑鼠懸停效果 */
-    .iso-menu li a:hover,
-    .iso-menu li a:active {
-        background-color: #ffcc00;
-        color: #121212;
-        border-color: #ffcc00;
+    /* 漢堡選單按鈕 */
+    .menu-toggle {
+        background: none;
+        border: 2px solid var(--hcfd-yellow);
+        border-radius: 4px;
+        color: var(--hcfd-yellow);
+        cursor: pointer;
+        padding: 5px 10px;
+        font-size: 1.2rem;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    /* --- 手機/平板模式 (寬度小於 768px 時觸發) --- */
-    @media (max-width: 768px) {
-        .iso-nav {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 15px;
-            padding: 15px;
-        }
-        .iso-menu {
-            width: 100%;
-            flex-direction: column; /* 手機上改為垂直排列 */
-            gap: 10px;
-        }
-        .iso-menu li {
-            width: 100%;
-        }
-        .iso-menu li a {
-            display: block;
-            text-align: center;
-            padding: 15px; /* 手機上增加點擊高度 */
-            font-size: 1.2rem;
-        }
+    .menu-toggle:active {
+        background-color: var(--hcfd-yellow);
+        color: var(--dark-bg);
+    }
+
+    /* 側邊隱藏選單面板 */
+    .side-menu {
+        position: fixed;
+        top: 0;
+        right: -100%; /* 預設隱藏在右側 */
+        width: 280px;
+        height: 100%;
+        background-color: var(--menu-bg);
+        z-index: 1001;
+        transition: 0.4s ease-in-out;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.7);
+        padding-top: 60px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* 選單顯示時的狀態 */
+    .side-menu.active {
+        right: 0;
+    }
+
+    /* 選單內的連結 */
+    .side-menu a {
+        color: #ffffff;
+        text-decoration: none;
+        padding: 20px 25px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-bottom: 1px solid #333;
+        transition: 0.2s;
+    }
+
+    .side-menu a:hover, .side-menu a:active {
+        background-color: var(--hcfd-yellow);
+        color: var(--dark-bg);
+    }
+
+    /* 關閉按鈕（選單內） */
+    .close-btn {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        color: var(--hcfd-yellow);
+        font-size: 1.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+    }
+
+    /* 遮罩層（開啟選單時背景變暗） */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.6);
+        display: none;
+        z-index: 1000;
+    }
+
+    .overlay.active {
+        display: block;
     }
 </style>
 
-<nav class="iso-nav">
-    <div class="iso-brand">HCFD 安全官決策平台</div>
-    <ul class="iso-menu">
-        <li><a href="{{ site.baseurl }}/index.html">首頁</a></li>
-        <li><a href="{{ site.baseurl }}/風險決策模型/index.html">風險決策</a></li>
-        <li><a href="{{ site.baseurl }}/環境氣候監控及NOAA/index.html">氣候監控</a></li>
-    </ul>
+<header class="iso-header">
+    <div class="iso-title">新竹縣政府消防局ISO作業平台</div>
+    <button class="menu-toggle" onclick="toggleMenu()">
+        <span>選單</span> ☰
+    </button>
+</header>
+
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+<nav class="side-menu" id="sideMenu">
+    <button class="close-btn" onclick="toggleMenu()">✕</button>
+    <a href="{{ site.baseurl }}/index.html">首頁首頁</a>
+    <a href="{{ site.baseurl }}/風險決策模型/index.html">風險決策模型</a>
+    <a href="{{ site.baseurl }}/環境氣候監控及NOAA/index.html">環境氣候監控及NOAA</a>
 </nav>
+
+<script>
+    function toggleMenu() {
+        const menu = document.getElementById('sideMenu');
+        const overlay = document.getElementById('overlay');
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+</script>
