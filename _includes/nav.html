@@ -1,14 +1,89 @@
-<!-- _includes/nav.html -->
-<nav style="background-color: #2c3e50; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
-    <ul style="list-style-type: none; margin: 0; padding: 0; display: flex; gap: 20px; flex-wrap: wrap;">
-        <li>
-            <a href="{{ site.baseurl }}/index.html" style="color: white; text-decoration: none; font-weight: bold;">首頁</a>
-        </li>
-        <li>
-            <a href="{{ site.baseurl }}/風險決策模型/index.html" style="color: white; text-decoration: none; font-weight: bold;">風險決策模型</a>
-        </li>
-        <li>
-            <a href="{{ site.baseurl }}/環境氣候監控及NOAA/index.html" style="color: white; text-decoration: none; font-weight: bold;">環境氣候監控及NOAA</a>
-        </li>
+<style>
+    /* 導覽列外部容器 */
+    .iso-nav {
+        background-color: #121212; /* 極致深色背景 */
+        border-bottom: 5px solid #ffcc00; /* 消防警戒黃底線 */
+        padding: 15px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-family: "Microsoft JhengHei", "Helvetica Neue", sans-serif;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        border-radius: 0 0 8px 8px; /* 底部微圓角 */
+        margin-bottom: 25px;
+    }
+
+    /* 系統品牌名稱 (HCFD ISO) */
+    .iso-brand {
+        color: #ffcc00;
+        font-size: 1.4rem;
+        font-weight: 900;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    /* 選單列表 */
+    .iso-menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 12px;
+    }
+
+    /* 按鈕設計 */
+    .iso-menu li a {
+        display: inline-block;
+        color: #ffffff;
+        background-color: #2a2a2a; /* 深灰按鈕底色 */
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding: 12px 20px;
+        border-radius: 6px;
+        border: 1px solid #444;
+        transition: all 0.2s ease-in-out;
+    }
+
+    /* 點擊與滑鼠懸停效果 */
+    .iso-menu li a:hover,
+    .iso-menu li a:active {
+        background-color: #ffcc00;
+        color: #121212;
+        border-color: #ffcc00;
+    }
+
+    /* --- 手機/平板模式 (寬度小於 768px 時觸發) --- */
+    @media (max-width: 768px) {
+        .iso-nav {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+        }
+        .iso-menu {
+            width: 100%;
+            flex-direction: column; /* 手機上改為垂直排列 */
+            gap: 10px;
+        }
+        .iso-menu li {
+            width: 100%;
+        }
+        .iso-menu li a {
+            display: block;
+            text-align: center;
+            padding: 15px; /* 手機上增加點擊高度 */
+            font-size: 1.2rem;
+        }
+    }
+</style>
+
+<nav class="iso-nav">
+    <div class="iso-brand">HCFD 安全官決策平台</div>
+    <ul class="iso-menu">
+        <li><a href="{{ site.baseurl }}/index.html">首頁</a></li>
+        <li><a href="{{ site.baseurl }}/風險決策模型/index.html">風險決策</a></li>
+        <li><a href="{{ site.baseurl }}/環境氣候監控及NOAA/index.html">氣候監控</a></li>
     </ul>
 </nav>
