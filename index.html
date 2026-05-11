@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>新竹縣消防局ISO作業平台</title>
+    <title>新竹縣政府消防局ISO作業平台</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --primary: #d32f2f; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #ffb74d; --medic: #4caf50; }
@@ -337,23 +337,44 @@
         }
     }
 
-    function executeCompassAndGPS() {
-        // 喚醒 GPS 以提高精準度 (非同步背景執行)
+function executeCompassAndGPS() {
+        // 喚醒 GPS 以輔助校正 (非同步執行)
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
-                () => { console.log("GPS 校正中..."); }, 
-                () => { console.log("GPS 失敗，使用預設磁場"); },
+                () => {}, 
+                () => {},
                 { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
             );
         }
 
-        // 建立資料監聽與處理器
-        const handleOrientation = function(event) {
-            let heading = null;
-            if (event.webkitCompassHeading) { heading = event.webkitCompassHeading; } 
-            else if (event.alpha !== null) { heading = 360 - event.alpha; }
+        let isCaptured = false;
 
-            if (heading !== null) {
+        const handleOrientation = function(event) {
+            if (isCaptured) return;
+
+            let heading = null;
+            let isAbsolute = false;
+
+            // 1. iOS 系統專屬：直接抓取羅盤絕對方位
+            if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
+                heading = event.webkitCompassHeading;
+                isAbsolute = true;
+            } 
+            // 2. Android 系統：必須強制過濾，只抓取帶有 absolute 標籤的真實方位
+            else if (event.type === 'deviceorientationabsolute' || event.absolute === true) {
+                if (event.alpha !== null) {
+                    heading = 360 - event.alpha;
+                    isAbsolute = true;
+                }
+            }
+
+            // 如果成功取得「真實絕對方位」才進行處理
+            if (isAbsolute && heading !== null) {
+                isCaptured = true; // 鎖定，只抓第一次正確數值
+                
+                // 修正可能出現的負數角度
+                if (heading < 0) heading += 360;
+
                 let val = "無風";
                 if (heading >= 337.5 || heading < 22.5) val = "北風";
                 else if (heading >= 22.5 && heading < 67.5) val = "東北風";
@@ -370,22 +391,27 @@
                     let t = b.innerText;
                     if ((val==="西北風"&&t==="NW")||(val==="北風"&&t==="N")||(val==="東北風"&&t==="NE")||(val==="西風"&&t==="W")||(val==="東風"&&t==="E")||(val==="西南風"&&t==="SW")||(val==="南風"&&t==="S")||(val==="東南風"&&t==="SE")) { b.classList.add('active'); }
                 });
-                showToast(`✅ 羅盤方位抓取成功: ${val}`, "success");
                 
-                // 抓到一次精準數據後就立刻關閉感測器，省電且防干擾
+                showToast(`✅ 羅盤抓取成功: ${val}`, "success");
+                
+                // 成功後關閉監聽器省電
                 window.removeEventListener('deviceorientationabsolute', handleOrientation);
                 window.removeEventListener('deviceorientation', handleOrientation);
             }
         };
 
+        // 綁定兩種監聽器 (同時涵蓋 iOS 與 Android 規格)
         window.addEventListener('deviceorientationabsolute', handleOrientation);
         window.addEventListener('deviceorientation', handleOrientation);
         
-        // 5秒逾時防呆：如果手機硬體真的沒有回傳任何數值，關閉監聽器避免死機
+        // 3秒逾時防呆：如果手機沒有絕對羅盤硬體，就自動取消避免卡死
         setTimeout(() => { 
-            window.removeEventListener('deviceorientationabsolute', handleOrientation); 
-            window.removeEventListener('deviceorientation', handleOrientation);
-        }, 5000); 
+            if (!isCaptured) {
+                window.removeEventListener('deviceorientationabsolute', handleOrientation); 
+                window.removeEventListener('deviceorientation', handleOrientation);
+                showToast("⚠️ 無法獲取地理北極，請手動點選方位", "warning");
+            }
+        }, 3000); 
     }
     function convertArea() {
         let inputEl = document.getElementById('b_area_input'); let unitEl = document.getElementById('b_area_unit'); let hiddenEl = document.getElementById('b_area');
