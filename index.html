@@ -8,30 +8,54 @@
     <style>
         :root { --primary: #d32f2f; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #ffb74d; --medic: #4caf50; }
         body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; padding-bottom: 100px; }
+        
+        /* 網頁專屬浮水印：移至最上層且不阻擋點擊 */
+        .page-watermark { 
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); 
+            font-size: 60px; font-weight: 900; color: rgba(255, 255, 255, 0.08); 
+            z-index: 9999; pointer-events: none; user-select: none; white-space: nowrap; letter-spacing: 5px; 
+        }
+
         h1, h2, h3 { color: var(--accent); margin-top: 0; }
         h1 { font-size: 1.4rem; text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; }
         h2 { font-size: 1.2rem; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        
         .page { display: none; animation: fadeIn 0.3s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
         .card { background: var(--card); border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--primary); }
         .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
         .grid-2 > div { display: flex; flex-direction: column; width: 100%; min-width: 0; }
         .row-full { display: flex; flex-direction: column; width: 100%; margin-bottom: 12px; }
+        
         label { display: block; font-size: 0.85rem; color: #aaa; margin-top: 10px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
-        input[type="text"], input[type="time"], input[type="number"], select { width: 100%; max-width: 100%; min-width: 0; padding: 0 10px; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; height: 48px; min-height: 48px; max-height: 48px; line-height: 48px; transition: 0.3s; }
+        
+        input[type="text"], input[type="time"], input[type="number"], select { 
+            width: 100%; max-width: 100%; min-width: 0; padding: 0 10px; border-radius: 6px; border: 1px solid #444; 
+            background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; 
+            height: 48px; min-height: 48px; max-height: 48px; line-height: 48px; transition: 0.3s; 
+        }
         input[type="time"]::-webkit-date-and-time-value { text-align: left; }
         input[type="number"] { font-family: monospace; }
-        textarea { width: 100%; max-width: 100%; min-width: 0; padding: 10px; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; min-height: 80px; line-height: 1.4; }
+        textarea { 
+            width: 100%; max-width: 100%; min-width: 0; padding: 10px; border-radius: 6px; border: 1px solid #444; 
+            background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; min-height: 80px; line-height: 1.4; 
+        }
+        
         optgroup { font-weight: bold; color: #ffb74d; background: #333; }
         option { color: white; background: #2a2a2a; }
+
         .btn-main { width: 100%; padding: 0; background: #444; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; height: 55px; min-height: 55px; max-height: 55px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
-        .btn-sync-brief, .btn-sync-medic { background: #4caf50; margin-top: 20px; }
-        .btn-export { background: #2196F3; margin-top: 10px; } 
+        .btn-delete { background: #b71c1c; color: white; border-radius: 4px; padding: 0 12px; font-size: 13px; font-weight: bold; width: auto; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: none;}
+        
         .list-item { background: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #444; }
         .list-title { font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 5px; text-align:center;}
+        
         .medic-entry { background: #252525; padding: 15px; border-radius: 6px; margin-top: 10px; border-left: 4px solid #4caf50; }
         .medic-body div { margin-bottom: 5px; font-size: 0.95rem; }
+
+        /* 即時視覺羅盤 CSS */
         .compass-container { position: relative; width: 140px; height: 140px; margin: 15px auto; border-radius: 50%; background: #1a1a1a; border: 4px solid #444; box-shadow: inset 0 0 15px rgba(0,0,0,0.8), 0 4px 15px rgba(0,0,0,0.5); }
         .compass-rose { position: absolute; width: 100%; height: 100%; border-radius: 50%; transition: transform 0.1s linear; }
         .compass-mark { position: absolute; font-weight: 900; font-size: 16px; }
@@ -43,36 +67,43 @@
         .compass-needle-s { position: absolute; top: 50%; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 45px solid #fff; }
         .compass-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 12px; height: 12px; background: #ffb74d; border-radius: 50%; z-index: 10; border: 2px solid #111; }
         .compass-target { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 14px solid #ffb74d; z-index: 20; }
+
         .wind-compass { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 280px; margin: 10px auto; }
         .wind-btn { aspect-ratio: 1/1; height: auto; padding: 0; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; background: #333; border: 1px solid #555; border-radius: 8px; color: #ddd; cursor: pointer; transition: 0.2s; }
         .wind-btn.active { background: var(--accent); color: #000; border-color: #fff; box-shadow: 0 0 10px rgba(255, 183, 77, 0.8); }
-        .btn-delete { background: #b71c1c; color: white; border-radius: 4px; padding: 0 12px; font-size: 13px; font-weight: bold; width: auto; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: none;}
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); display: none; border-top: 1px solid #333; z-index: 100000; padding-bottom: env(safe-area-inset-bottom); }
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); display: flex; border-top: 1px solid #333; z-index: 100000; padding-bottom: env(safe-area-inset-bottom); }
         .bottom-nav button { flex: 1; padding: 16px 0; background: transparent; border: none; color: #777; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .bottom-nav button.active { color: var(--primary); border-top: 3px solid var(--primary); }
+
         .back-to-top { position: fixed; bottom: 90px; right: 20px; background-color: #555; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.6); cursor: pointer; z-index: 90000; display: none; align-items: center; justify-content: center; opacity: 0.85; }
+
         #sysToast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 30px; font-size: 15px; font-weight: bold; z-index: 999999; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: center; white-space: nowrap; }
-        #exportTemplate { position: absolute; left: -9999px; top: -9999px; width: 1000px; background: #ffffff; color: #000000; padding: 30px; box-sizing: border-box; font-family: "微軟正黑體", sans-serif; position: relative; overflow: hidden; }
-        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 55px; font-weight: 900; color: rgba(0, 0, 0, 0.05); z-index: 0; pointer-events: none; user-select: none; white-space: nowrap; letter-spacing: 5px; }
+
+        /* 導出圖檔模板：加深字體、高對比度 */
+        #exportTemplate { position: absolute; left: -9999px; top: -9999px; width: 1000px; background: #ffffff; color: #000000; padding: 40px; box-sizing: border-box; font-family: "微軟正黑體", sans-serif; overflow: hidden; }
         .export-content { position: relative; z-index: 1; }
-        .export-title { text-align: center; font-size: 32px; font-weight: 900; margin-bottom: 20px; border-bottom: 4px solid #d32f2f; padding-bottom: 10px; color:#d32f2f;}
-        .export-section { margin-bottom: 15px; border: 2px solid #000; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.9); }
-        .export-section-title { background: #222; color: #fff; padding: 8px 15px; font-size: 20px; font-weight: bold; }
+        .export-header { text-align: center; font-size: 34px; font-weight: 900; margin-bottom: 25px; border-bottom: 5px solid #d32f2f; padding-bottom: 10px; color:#d32f2f;}
+        .export-section { margin-bottom: 20px; border: 2px solid #000; border-radius: 10px; overflow: hidden; background: #fff; }
+        .export-section-title { background: #111; color: #fff; padding: 10px 15px; font-size: 22px; font-weight: 900; }
         .export-grid { display: grid; grid-template-columns: 1fr 1fr; }
-        .export-row { display: flex; border-bottom: 1px solid #444; }
-        .export-row:last-child { border-bottom: none; }
-        .export-label { background: #e0e0e0; padding: 8px 15px; font-weight: bold; font-size: 16px; color: #000; width: 140px; flex-shrink: 0; border-right: 1px solid #444; display: flex; align-items: center;}
-        .export-val { padding: 8px 15px; flex-grow: 1; font-weight: bold; font-size: 16px; color: #000; display: flex; align-items: center;}
-        .export-table { width: 100%; border-collapse: collapse; text-align: center; table-layout: fixed;}
-        .export-table th { background: #e0e0e0; padding: 10px 4px; border: 1px solid #444; font-weight: bold; font-size: 15px; color: #000;}
-        .export-table td { padding: 10px 4px; border: 1px solid #444; font-weight: bold; font-size: 15px; color: #000; vertical-align: middle;}
+        .export-row { display: flex; border-bottom: 1px solid #222; }
+        .export-label { background: #f0f0f0; padding: 12px 15px; font-weight: 900; font-size: 18px; width: 160px; flex-shrink: 0; border-right: 1px solid #222; color: #000; display: flex; align-items: center; }
+        .export-val { padding: 12px 15px; flex-grow: 1; font-weight: 900; font-size: 18px; color: #000; display: flex; align-items: center; }
+        
+        .export-table { width: 100%; border-collapse: collapse; text-align: center; table-layout: fixed; border: 2px solid #000; }
+        .export-table th { background: #e0e0e0; padding: 14px 5px; border: 2px solid #000; font-weight: 900; font-size: 18px; color: #000 !important; }
+        .export-table td { padding: 14px 5px; border: 2px solid #000; font-weight: 900; font-size: 18px; vertical-align: middle; color: #000 !important; }
+        
         .photo-upload-btn { background: #2196F3; color: white; padding: 0 12px; border-radius: 4px; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; height: 32px; border: none; line-height: 1;}
     </style>
 </head>
 <body>
 
+<div class="page-watermark">powered by 單柏洋</div>
+
 <div id="sysToast">✅ 系統提示</div>
-<div id="autoSyncIndicator" style="position:fixed; top:20px; right:20px; background:#4caf50; color:white; padding:8px 15px; border-radius:20px; font-size:14px; font-weight:bold; display:none; z-index:99999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">🔄 雲端自動同步成功</div>
+<div id="autoSyncIndicator" style="position:fixed; top:20px; right:20px; background:#4caf50; color:white; padding:8px 15px; border-radius:20px; font-size:14px; font-weight:bold; display:none; z-index:99999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">🔄 雲端同步完成</div>
 <button id="backToTopBtn" class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">⬆️</button>
 
 <div id="page-home" class="page active">
@@ -80,16 +111,16 @@
     <div class="card">
         <h2>建立新專案</h2>
         <div class="grid-2">
-            <div><label>案名 <span style="color:#ff5252;">*必填</span></label><input type="text" id="newProjectName" placeholder="案名..."></div>
+            <div><label>案名 <span style="color:#ff5252;">*必填</span></label><input type="text" id="newProjectName" placeholder="例如: 湖口火警"></div>
             <div><label>ISO姓名 <span style="color:#ff5252;">*必填</span></label><input type="text" id="newProjectCreator" placeholder="姓名..."></div>
         </div>
         <button id="btnCreateProject" class="btn-main" style="background:var(--primary);" onclick="confirmAction(this, createNewProject)">建立新專案</button>
     </div>
     <div class="card">
-        <h2 style="color:var(--accent);">雲端既有救災專案列表</h2>
+        <h2 style="color:var(--accent);">雲端救災專案列表</h2>
         <label style="color:#ff5252; font-weight:bold; overflow:visible;">⚠️ 載入專案前必填</label>
         <input type="text" id="modifierName" placeholder="請輸入您的姓名 (操作人員)..." style="margin-bottom:10px; border: 2px solid #ff5252;">
-        <button class="btn-main" style="background:#555; height: 48px; min-height: 48px; font-size: 1rem; border-radius:6px; padding:0;" onclick="renderHome()">↻ 重新整理雲端列表</button>
+        <button class="btn-main" style="background:#555; height: 48px; min-height: 48px;" onclick="renderHome()">↻ 重新整理雲端列表</button>
         <div id="projectListContainer" style="text-align: center; padding: 10px; color:#aaa;">正在讀取雲端資料庫...</div>
     </div>
 </div>
@@ -139,7 +170,10 @@
             <label>單一樓層面積 (自動換算)</label>
             <div style="display:flex; gap:10px; align-items:center;">
                 <input type="number" id="b_area_input" placeholder="數字..." style="flex:2;" onblur="convertArea()">
-                <select id="b_area_unit" style="flex:1;" onchange="convertArea()"><option value="m2">平方公尺(㎡)</option><option value="ping">坪</option></select>
+                <select id="b_area_unit" style="flex:1;" onchange="convertArea()">
+                    <option value="m2">平方公尺(㎡)</option>
+                    <option value="ping">坪</option>
+                </select>
                 <input type="hidden" id="b_area"> 
             </div>
         </div>
@@ -203,12 +237,9 @@
             <div class="compass-container">
                 <div class="compass-target"></div>
                 <div class="compass-rose" id="compassRose">
-                    <div class="compass-mark mark-n">N</div>
-                    <div class="compass-mark mark-e">E</div>
-                    <div class="compass-mark mark-s">S</div>
-                    <div class="compass-mark mark-w">W</div>
-                    <div class="compass-needle-n"></div>
-                    <div class="compass-needle-s"></div>
+                    <div class="compass-mark mark-n">N</div><div class="compass-mark mark-e">E</div>
+                    <div class="compass-mark mark-s">S</div><div class="compass-mark mark-w">W</div>
+                    <div class="compass-needle-n"></div><div class="compass-needle-s"></div>
                     <div class="compass-center"></div>
                 </div>
             </div>
@@ -220,15 +251,9 @@
         </div>
 
         <div class="wind-compass" id="windCompass">
-            <button class="wind-btn" onclick="setWind('西北風', this)">NW</button>
-            <button class="wind-btn" onclick="setWind('北風', this)">N</button>
-            <button class="wind-btn" onclick="setWind('東北風', this)">NE</button>
-            <button class="wind-btn" onclick="setWind('西風', this)">W</button>
-            <button class="wind-btn" onclick="setWind('無風', this)">無</button>
-            <button class="wind-btn" onclick="setWind('東風', this)">E</button>
-            <button class="wind-btn" onclick="setWind('西南風', this)">SW</button>
-            <button class="wind-btn" onclick="setWind('南風', this)">S</button>
-            <button class="wind-btn" onclick="setWind('東南風', this)">SE</button>
+            <button class="wind-btn" onclick="setWind('西北風', this)">NW</button><button class="wind-btn" onclick="setWind('北風', this)">N</button><button class="wind-btn" onclick="setWind('東北風', this)">NE</button>
+            <button class="wind-btn" onclick="setWind('西風', this)">W</button><button class="wind-btn" onclick="setWind('無風', this)">無</button><button class="wind-btn" onclick="setWind('東風', this)">E</button>
+            <button class="wind-btn" onclick="setWind('西南風', this)">SW</button><button class="wind-btn" onclick="setWind('南風', this)">S</button><button class="wind-btn" onclick="setWind('東南風', this)">SE</button>
         </div>
         <input type="hidden" id="e_wind" value="無風">
 
@@ -238,21 +263,15 @@
         </div>
     </div>
 
-    <button class="btn-main btn-sync-brief" onclick="syncBriefingToCloud()">☁️ 儲存並同步【簡報表】至雲端</button>
-    <button id="btnExportImage" class="btn-main btn-export" onclick="exportToImage()" style="background:#2196F3;">📸 匯出【簡報表】圖檔</button>
+    <button class="btn-main btn-sync-brief" onclick="syncBriefingToCloud()" style="background:#4caf50; margin-top:20px;">☁️ 儲存並同步【簡報表】至雲端</button>
+    <button id="btnExportImage" class="btn-main" onclick="exportToImage()" style="background:#2196F3; margin-top:10px;">📸 匯出最佳格式圖檔</button>
 </div>
 
 <div id="page-medic" class="page">
     <div class="card" style="border-left-color: var(--medic);">
         <h2 style="color:var(--medic);">新增 MEDIC 資料</h2>
-        <div class="row-full">
-            <label>時間 <span style="color:#ff5252; font-weight:bold;">*必填</span></label>
-            <input type="time" id="m_time">
-        </div>
-        <div class="row-full">
-            <label>監控環境與行動 (M) <span style="color:#ff5252; font-weight:bold;">*必填 (加入後無法修改)</span></label>
-            <textarea id="m_m" placeholder="偵測的地點或區域..."></textarea>
-        </div>
+        <div class="row-full"><label>時間 <span style="color:#ff5252; font-weight:bold;">*必填</span></label><input type="time" id="m_time"></div>
+        <div class="row-full"><label>監控環境與行動 (M) <span style="color:#ff5252; font-weight:bold;">*必填 (加入後無法修改)</span></label><textarea id="m_m" placeholder="偵測的地點或區域..."></textarea></div>
         <label>評估潛在危險 (E)</label><textarea id="m_e"></textarea>
         <label>預防措施 (D)</label><textarea id="m_d"></textarea>
         <label>介入 (I)</label><textarea id="m_i"></textarea>
@@ -265,7 +284,7 @@
         <div id="medicListContainer"></div>
     </div>
 
-    <button class="btn-main btn-sync-medic" onclick="syncMedicToCloud()">☁️ 儲存並同步全部【MEDIC表】至雲端</button>
+    <button class="btn-main btn-sync-medic" onclick="syncMedicToCloud()" style="background:#4caf50; margin-top:20px;">☁️ 儲存並同步全部【MEDIC表】至雲端</button>
 </div>
 
 <nav class="bottom-nav" id="bottomNav">
@@ -275,67 +294,59 @@
 </nav>
 
 <div id="exportTemplate">
-    <div class="watermark">powered by 單柏洋</div>
     <div class="export-content">
-        <div class="export-title">新竹縣消防局 ISO現場簡報表</div>
+        <div class="export-header">新竹縣消防局 ISO現場簡報表</div>
+        
         <div class="export-section">
-            <div class="export-section-title">一、 基本資訊</div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; border-bottom:1px solid #000;">
-                <div style="border-right:1px solid #000; padding:8px;"><b>災害案名：</b><span id="exp_caseName"></span></div>
-                <div style="padding:8px;"><b>抵達時間：</b><span id="exp_arriveTime"></span></div>
+            <div class="export-section-title">一、 基本資訊與指揮確認</div>
+            <div class="export-grid">
+                <div class="export-row"><div class="export-label">災害案名</div><div class="export-val" id="exp_caseName"></div></div>
+                <div class="export-row"><div class="export-label">抵達時間</div><div class="export-val" id="exp_arriveTime"></div></div>
+                <div class="export-row"><div class="export-label">ISO / IC</div><div class="export-val" id="exp_iso_ic"></div></div>
+                <div class="export-row"><div class="export-label">用途構造</div><div class="export-val" id="exp_usage_structure"></div></div>
+                <div class="export-row"><div class="export-label">單層面積(㎡)</div><div class="export-val" id="exp_area"></div></div>
+                <div class="export-row"><div class="export-label">樓層分佈</div><div class="export-val" id="exp_floor"></div></div>
+                <div class="export-row"><div class="export-label">確認時間</div><div class="export-val" id="exp_c_time"></div></div>
+                <div class="export-row"><div class="export-label">作業組數</div><div class="export-val" id="exp_c_deployCount"></div></div>
+                <div class="export-row"><div class="export-label">受困 / 待救</div><div class="export-val" id="exp_trapped"></div></div>
+                <div class="export-row"><div class="export-label">待救位置</div><div class="export-val" id="exp_trapLoc"></div></div>
             </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; border-bottom:1px solid #000;">
-                <div style="border-right:1px solid #000; padding:8px;"><b>ISO/IC：</b><span id="exp_iso_ic"></span></div>
-                <div style="padding:8px;"><b>建築用途：</b><span id="exp_usage"></span></div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; border-bottom:1px solid #000;">
-                <div style="border-right:1px solid #000; padding:8px;"><b>建築構造：</b><span id="exp_structure"></span></div>
-                <div style="padding:8px;"><b>單層面積：</b><span id="exp_area"></span></div>
-            </div>
-            <div style="padding:8px; border-bottom:1px solid #000;"><b>樓層分佈：</b><span id="exp_floor"></span></div>
+            <div class="export-row" style="border-top:1px solid #222;"><div class="export-label">備註</div><div class="export-val" id="exp_c_notes"></div></div>
         </div>
 
         <div class="export-section">
-            <div class="export-section-title">二、 與指揮官確認事項</div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; border-bottom:1px solid #000;">
-                <div style="border-right:1px solid #000; padding:8px;"><b>確認時間：</b><span id="exp_c_time"></span></div>
-                <div style="padding:8px;"><b>作業組數：</b><span id="exp_c_deployCount"></span></div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; border-bottom:1px solid #000;">
-                <div style="border-right:1px solid #000; padding:8px;"><b>受困情形：</b><span id="exp_c_trappedState"></span></div>
-                <div style="padding:8px;"><b>已救出人數：</b><span id="exp_c_rescued"></span></div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; border-bottom:1px solid #000;">
-                <div style="border-right:1px solid #000; padding:8px;"><b>待救人數：</b><span id="exp_c_toRescue"></span></div>
-                <div style="padding:8px;"><b>待救位置：</b><span id="exp_c_trapLocation"></span></div>
-            </div>
-            <div style="padding:8px;"><b>備註：</b><span id="exp_c_notes"></span></div>
-        </div>
-
-        <div class="export-section">
-            <div class="export-section-title">三、 初期 360° RECON</div>
+            <div class="export-section-title">二、 360° RECON 面向回報</div>
             <table class="export-table" id="exp_reconTable"></table>
         </div>
 
         <div class="export-section">
-            <div class="export-section-title">四、 安全簡報與環境分析</div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; border-bottom:1px solid #000;">
-                <div style="border-right:1px solid #000; padding:8px;"><b>簡報時間：</b><span id="exp_s_time"></span></div>
-                <div style="padding:8px;"><b>天氣與風向：</b><span id="exp_e_weather_wind"></span></div>
+            <div class="export-section-title">三、 環境安全與建議</div>
+            <div class="export-grid">
+                <div class="export-row"><div class="export-label">簡報時間</div><div class="export-val" id="exp_s_time"></div></div>
+                <div class="export-row"><div class="export-label">天氣與風向</div><div class="export-val" id="exp_e_weather_wind"></div></div>
             </div>
-            <div style="padding:8px;"><b>初步分析及建議：</b><br><span id="exp_s_advice" style="white-space: pre-wrap;"></span></div>
+            <div style="display:flex; width:100%; border-top:1px solid #222;">
+                <div class="export-label" style="border-right:1px solid #222;">分析與建議</div>
+                <div class="export-val" id="exp_s_advice" style="white-space: pre-wrap;"></div>
+            </div>
         </div>
-        <div style="text-align: right; color: #444; font-size: 13px; font-weight:bold; margin-top:10px;" id="exp_printInfo"></div>
+        <div style="text-align: right; color: #000; font-size: 16px; font-weight:bold; margin-top:10px;" id="exp_printInfo"></div>
     </div>
 </div>
 
 <script>
+    // ==========================================
+    // ⚠️ 記得替換下方網址 ⚠️
+    // ==========================================
     const GAS_URL = "https://script.google.com/macros/s/AKfycbz4Lf6I0Na-mC940MtkDmD5CfA9WAoCYjy67sY3bQWSKycY45ki67NpHEMenDIr_ic/exec"; 
+    // ==========================================
+    
     const fetchHeaders = { 'Content-Type': 'text/plain;charset=utf-8' };
     let currentProject = null; let currentModifier = ""; let db = JSON.parse(localStorage.getItem('isoDB')) || {};
     window.lastBHash = ""; window.lastMHash = ""; window.autoSyncInterval = null;
     let isSyncLocked = false; 
 
+    // --- 視覺化電子羅盤專用變數 ---
     let liveOrientationHandler = null;
     let isCompassRunning = false;
     let currentLiveHeading = null;
@@ -345,10 +356,17 @@
         t.innerHTML = msg; t.style.display = "block"; setTimeout(() => { t.style.display = "none"; }, 3000);
     }
 
-    function confirmAction(btn, cb, arg) {
-        if (btn.dataset.confirm === "yes") { btn.dataset.confirm = ""; btn.innerText = btn.dataset.ot; btn.style.background = btn.dataset.ob; cb(arg); return; } 
-        btn.dataset.ot = btn.innerText; btn.dataset.ob = btn.style.background; btn.dataset.confirm = "yes"; btn.style.background = "#d32f2f"; btn.innerText = "⚠️ 確定？";
-        setTimeout(() => { if (btn.dataset.confirm === "yes") { btn.dataset.confirm = ""; btn.innerText = btn.dataset.ot; btn.style.background = btn.dataset.ob; } }, 3000);
+    function confirmAction(btn, callback, arg1) {
+        if (btn.dataset.confirm === "yes") {
+            btn.dataset.confirm = ""; btn.innerText = btn.dataset.originalText; btn.style.background = btn.dataset.originalBg; callback(arg1); return;
+        } 
+        btn.dataset.originalText = btn.innerText; btn.dataset.originalBg = btn.style.background; btn.dataset.confirm = "yes";
+        btn.style.background = "#d32f2f"; btn.innerText = "⚠️ 確定操作？";
+        setTimeout(() => {
+            if (btn.dataset.confirm === "yes") {
+                btn.dataset.confirm = ""; btn.innerText = btn.dataset.originalText; btn.style.background = btn.dataset.originalBg;
+            }
+        }, 3000);
     }
 
     function setWind(val, el) {
@@ -697,27 +715,41 @@
         const btn = document.getElementById('btnExportImage'); btn.innerText = "⏳ 正在處理圖檔排版...";
 
         const v = (id) => document.getElementById(id).value || '未填寫';
-        document.getElementById('exp_caseName').innerText = v('b_caseName'); document.getElementById('exp_arriveTime').innerText = v('b_arriveTime');
-        document.getElementById('exp_iso').innerText = v('b_iso'); document.getElementById('exp_ic').innerText = v('b_ic');
-        document.getElementById('exp_usage').innerText = v('b_usage')==='其他'?v('b_usage_other'):v('b_usage'); document.getElementById('exp_structure').innerText = v('b_structure')==='其他'?v('b_structure_other'):v('b_structure');
+        
+        document.getElementById('exp_caseName').innerText = v('b_caseName');
+        document.getElementById('exp_arriveTime').innerText = v('b_arriveTime');
+        document.getElementById('exp_iso_ic').innerText = `ISO: ${v('b_iso')} / IC: ${v('b_ic')}`;
+        document.getElementById('exp_usage_structure').innerText = `${v('b_usage') === '其他' ? v('b_usage_other') : v('b_usage')} / ${v('b_structure') === '其他' ? v('b_structure_other') : v('b_structure')}`;
         let areaVal = v('b_area'); document.getElementById('exp_area').innerText = (areaVal && areaVal !== '未填寫') ? areaVal : '未填寫';
         document.getElementById('exp_floor').innerText = `地上 ${v('b_floorUp')} 層 / 地下 ${v('b_floorDown')} 層`;
         document.getElementById('exp_c_time').innerText = v('c_time'); document.getElementById('exp_c_deployCount').innerText = v('c_deployCount');
         
-        let trappedState = v('c_trappedState'); if(trappedState === '有') { document.getElementById('exp_c_trappedState').innerHTML = `<span style="color:#d32f2f; font-weight:900;">${trappedState}</span>`; } else { document.getElementById('exp_c_trappedState').innerText = trappedState; }
-        document.getElementById('exp_c_rescued').innerText = `${v('c_rescued')} 人`; document.getElementById('exp_c_toRescue').innerHTML = `<span style="color:#d32f2f; font-weight:900;">${v('c_toRescue')} 人</span>`;
-        let trapLoc = v('c_trapLocation'); if(trapLoc !== '未填寫' && trapLoc !== '') { document.getElementById('exp_c_trapLocation').innerHTML = `<span style="color:#d32f2f; font-weight:900;">${trapLoc}</span>`; } else { document.getElementById('exp_c_trapLocation').innerHTML = `無`; }
+        let trappedState = v('c_trappedState');
+        if(trappedState === '有') { document.getElementById('exp_trapped').innerHTML = `<span style="color:#d32f2f; font-weight:900;">⚠️ 有 (${v('c_toRescue')} 人待救)</span>`; } 
+        else { document.getElementById('exp_trapped').innerText = "無受困"; }
+
+        let trapLoc = v('c_trapLocation');
+        if(trapLoc !== '未填寫' && trapLoc !== '') { document.getElementById('exp_trapLoc').innerHTML = `<span style="color:#d32f2f; font-weight:900;">${trapLoc}</span>`; } 
+        else { document.getElementById('exp_trapLoc').innerHTML = `無`; }
+        
         document.getElementById('exp_c_notes').innerText = v('c_notes');
 
-        let reconTableHtml = `<tr><th width="8%">面向</th><th width="8%">樓層</th><th width="8%">組數</th><th width="8%">火勢</th><th width="8%">煙</th><th width="8%">門</th><th width="8%">窗</th><th width="22%">風險</th><th width="12%">完成時間</th><th width="10%">照片</th></tr>`;
+        // 表格重繪：加深字體與框線
+        let reconTableHtml = `
+            <tr>
+                <th width="8%">面向</th><th width="8%">樓層</th><th width="8%">組數</th>
+                <th width="10%">火勢</th><th width="10%">煙</th><th width="8%">門</th><th width="8%">窗</th>
+                <th width="20%">風險</th><th width="10%">時間</th><th width="10%">照片</th>
+            </tr>
+        `;
         const faces = ["第一面", "第二面", "第三面", "第四面"];
         for(let i=0; i<4; i++) {
             let fire = v(`r_${i}_fire`); let smoke = v(`r_${i}_smoke`); let risk = v(`r_${i}_risk`);
             let fireFmt = (parseInt(fire.charAt(0)) >= 2) ? `<span style="color:#d32f2f; font-weight:900;">${fire}</span>` : fire;
             let smokeFmt = (parseInt(smoke.charAt(0)) >= 2) ? `<span style="color:#d32f2f; font-weight:900;">${smoke}</span>` : smoke;
             let riskFmt = (risk !== '未填寫' && risk !== '') ? `<span style="background-color:#fff9c4; color:#d32f2f; padding:2px 6px; border:2px solid #ffb74d; border-radius:4px;">${risk}</span>` : '無';
-            let photoUrl = v(`r_${i}_photo_url`); let imgHtml = (photoUrl && photoUrl !== '未填寫' && photoUrl !== '') ? '<div style="color:#2196F3; font-weight:bold; font-size:12px;">[雲端有照片]</div>' : '<div style="color:#888; font-size:12px;">無照片</div>';
-            reconTableHtml += `<tr><td style="font-weight:bold;">${faces[i]}</td><td>${v(`r_${i}_floor`)}</td><td>${v(`r_${i}_teams`)}</td><td>${fireFmt}</td><td>${smokeFmt}</td><td>${v(`r_${i}_door`)}</td><td>${v(`r_${i}_window`)}</td><td>${riskFmt}</td><td>${v(`r_${i}_time`)}</td><td>${imgHtml}</td></tr>`;
+            let photoUrl = v(`r_${i}_photo_url`); let imgHtml = (photoUrl && photoUrl !== '未填寫' && photoUrl !== '') ? '<div style="color:#2196F3; font-weight:900; font-size:16px;">[雲端有照]</div>' : '<div style="color:#444; font-weight:900; font-size:16px;">無</div>';
+            reconTableHtml += `<tr><td style="font-weight:900;">${faces[i]}</td><td>${v(`r_${i}_floor`)}</td><td>${v(`r_${i}_teams`)}</td><td>${fireFmt}</td><td>${smokeFmt}</td><td>${v(`r_${i}_door`)}</td><td>${v(`r_${i}_window`)}</td><td>${riskFmt}</td><td>${v(`r_${i}_time`)}</td><td>${imgHtml}</td></tr>`;
         }
         document.getElementById('exp_reconTable').innerHTML = reconTableHtml;
 
@@ -728,8 +760,8 @@
             const element = document.getElementById('exportTemplate');
             html2canvas(element, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
                 const link = document.createElement('a'); link.download = `[ISO簡報表] ${currentProject}.png`; link.href = canvas.toDataURL("image/png"); link.click();
-                btn.innerText = "📸 匯出【簡報表】圖檔"; showToast("✅ 圖檔生成完畢，準備下載！", "success");
-            }).catch(err => { showToast("❌ 圖檔產出失敗", "error"); btn.innerText = "📸 匯出【簡報表】圖檔"; });
+                btn.innerText = "📸 匯出最佳格式圖檔"; showToast("✅ 圖檔生成完畢，準備下載！", "success");
+            }).catch(err => { showToast("❌ 圖檔產出失敗", "error"); btn.innerText = "📸 匯出最佳格式圖檔"; });
         }, 500); 
     }
 
