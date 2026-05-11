@@ -1,7 +1,6 @@
 <style>
     /* 全域設定 */
     :root {
-        --hcfd-red: #e74c3c;
         --hcfd-yellow: #ffcc00;
         --dark-bg: #121212;
         --menu-bg: #1e1e1e;
@@ -35,17 +34,6 @@
     .iso-title-link:hover {
         color: var(--hcfd-yellow);
     }
-   
-    /* 網頁名稱標題 */
-    .iso-title {
-        color: #ffffff;
-        font-size: 1.2rem;
-        font-weight: bold;
-        letter-spacing: 1px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
 
     /* 漢堡選單按鈕 */
     .menu-toggle {
@@ -54,41 +42,34 @@
         border-radius: 4px;
         color: var(--hcfd-yellow);
         cursor: pointer;
-        padding: 5px 10px;
-        font-size: 1.2rem;
-        transition: 0.3s;
+        padding: 6px 12px;
+        font-size: 1.1rem;
+        font-weight: bold;
         display: flex;
         align-items: center;
         gap: 8px;
-    }
-
-    .menu-toggle:active {
-        background-color: var(--hcfd-yellow);
-        color: var(--dark-bg);
     }
 
     /* 側邊隱藏選單面板 */
     .side-menu {
         position: fixed;
         top: 0;
-        right: -100%; /* 預設隱藏在右側 */
+        right: -100%;
         width: 280px;
         height: 100%;
         background-color: var(--menu-bg);
         z-index: 1001;
         transition: 0.4s ease-in-out;
         box-shadow: -5px 0 15px rgba(0,0,0,0.7);
-        padding-top: 60px;
+        padding-top: 70px;
         display: flex;
         flex-direction: column;
     }
 
-    /* 選單顯示時的狀態 */
     .side-menu.active {
         right: 0;
     }
 
-    /* 選單內的連結 */
     .side-menu a {
         color: #ffffff;
         text-decoration: none;
@@ -96,7 +77,6 @@
         font-size: 1.2rem;
         font-weight: bold;
         border-bottom: 1px solid #333;
-        transition: 0.2s;
     }
 
     .side-menu a:hover, .side-menu a:active {
@@ -104,26 +84,24 @@
         color: var(--dark-bg);
     }
 
-    /* 關閉按鈕（選單內） */
     .close-btn {
         position: absolute;
         top: 15px;
         right: 20px;
         color: var(--hcfd-yellow);
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         cursor: pointer;
         background: none;
         border: none;
     }
 
-    /* 遮罩層（開啟選單時背景變暗） */
     .overlay {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0,0,0,0.6);
+        background: rgba(0,0,0,0.7);
         display: none;
         z-index: 1000;
     }
@@ -134,7 +112,8 @@
 </style>
 
 <header class="iso-header">
-    <div class="iso-title">竹縣消ISO作業平台</div>
+    <a href="{{ site.baseurl }}/index.html" class="iso-title-link">竹縣消ISO作業平台</a>
+    
     <button class="menu-toggle" onclick="toggleMenu()">
         <span>選單</span> ☰
     </button>
