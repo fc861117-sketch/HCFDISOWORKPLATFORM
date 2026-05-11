@@ -299,21 +299,44 @@
         showToast(`已選定風向: ${val}`);
     }
 
+// 整合 GPS 定位校正與 iOS 權限秒抓的電子羅盤
     function getDeviceCompass() {
-        showToast("📍 啟動 GPS 定位以確保地理方位...", "warning");
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                () => { startCompassProcess(); },
-                () => { showToast("⚠️ GPS 失敗，改用預設磁場方位", "warning"); startCompassProcess(); },
-                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-            );
-        } else { startCompassProcess(); }
+        showToast("📍 請求感測器權限中...", "warning");
+
+        // 【關鍵修復】：必須在點擊按鈕的「第一時間」立刻呼叫 requestPermission，不能放在 GPS 裡面等
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission()
+                .then(permissionState => {
+                    if (permissionState === 'granted') {
+                        executeCompassAndGPS(); // 拿到權限後，開始抓方位
+                    } else {
+                        showToast("❌ 羅盤存取權限被拒絕", "error");
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                    showToast("❌ 無法呼叫電子羅盤 (請確認使用手機且為 HTTPS 連線)", "error");
+                });
+        } else {
+            // Android 系統或是不需要特殊授權的設備，直接執行
+            executeCompassAndGPS();
+        }
     }
 
-    function startCompassProcess() {
-        showToast("🧭 請將手機頂部對準風吹來的方向...", "warning");
+    function executeCompassAndGPS() {
+        // 1. 在背景喚醒 GPS 模組以提高感測器精準度 (不需等待它回傳)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                () => {}, 
+                () => { console.log("GPS 未啟用，使用預設磁場方位"); },
+                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            );
+        }
+
+        // 2. 開始抓取羅盤方位
         const handleOrientation = function(event) {
             let heading = null;
+            // 優先抓取 iOS 的絕對方位，若無則抓取 Android 的 alpha 值
             if (event.webkitCompassHeading) { heading = event.webkitCompassHeading; } 
             else if (event.alpha !== null) { heading = 360 - event.alpha; }
 
@@ -335,22 +358,23 @@
                     if ((val==="西北風"&&t==="NW")||(val==="北風"&&t==="N")||(val==="東北風"&&t==="NE")||(val==="西風"&&t==="W")||(val==="東風"&&t==="E")||(val==="西南風"&&t==="SW")||(val==="南風"&&t==="S")||(val==="東南風"&&t==="SE")) { b.classList.add('active'); }
                 });
                 showToast(`✅ 羅盤方位抓取成功: ${val}`, "success");
+                
+                // 抓到數據後立即解除監聽，避免耗電
                 window.removeEventListener('deviceorientationabsolute', handleOrientation);
                 window.removeEventListener('deviceorientation', handleOrientation);
             }
         };
 
-        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-            DeviceOrientationEvent.requestPermission().then(state => {
-                if (state === 'granted') { window.addEventListener('deviceorientation', handleOrientation); } 
-                else { showToast("❌ 羅盤存取權限被拒絕", "error"); }
-            }).catch(() => showToast("❌ 無法呼叫電子羅盤", "error"));
-        } else {
-            window.addEventListener('deviceorientationabsolute', handleOrientation);
-            window.addEventListener('deviceorientation', handleOrientation);
-            setTimeout(() => { 
-                window.removeEventListener('deviceorientationabsolute', handleOrientation); window.removeEventListener('deviceorientation', handleOrientation);
-            }, 3000); 
+        // 綁定監聽器
+        window.addEventListener('deviceorientationabsolute', handleOrientation);
+        window.addEventListener('deviceorientation', handleOrientation);
+        
+        // 設個 3 秒防呆，如果真的抓不到就停用，避免網頁卡住
+        setTimeout(() => { 
+            window.removeEventListener('deviceorientationabsolute', handleOrientation); 
+            window.removeEventListener('deviceorientation', handleOrientation);
+        }, 3000); 
+    }
         }
     }
 
