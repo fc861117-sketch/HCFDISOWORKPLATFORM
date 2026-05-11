@@ -11,61 +11,57 @@
         h1, h2, h3 { color: var(--accent); margin-top: 0; }
         h1 { font-size: 1.4rem; text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; }
         h2 { font-size: 1.2rem; border-bottom: 1px solid #444; padding-bottom: 5px; }
-        
         .page { display: none; animation: fadeIn 0.3s; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
         .card { background: var(--card); border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--primary); }
         .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
         .grid-2 > div { display: flex; flex-direction: column; width: 100%; min-width: 0; }
         .row-full { display: flex; flex-direction: column; width: 100%; margin-bottom: 12px; }
-        label { display: block; font-size: 0.85rem; color: #aaa; margin-top: 10px; margin-bottom: 4px; white-space: nowrap; }
-        
-        input, select, .nav-btn { 
-            width: 100%; max-width: 100%; min-width: 0; padding: 0 10px; border-radius: 6px; border: 1px solid #444; 
-            background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; 
-            height: 48px; min-height: 48px; transition: 0.3s;
-        }
+        label { display: block; font-size: 0.85rem; color: #aaa; margin-top: 10px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+        input[type="text"], input[type="time"], input[type="number"], select { width: 100%; max-width: 100%; min-width: 0; padding: 0 10px; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; height: 48px; min-height: 48px; max-height: 48px; line-height: 48px; transition: 0.3s; }
         input[type="time"]::-webkit-date-and-time-value { text-align: left; }
-        textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; min-height: 80px; }
-
-        .btn-main { width: 100%; background: #444; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; height: 55px; display: flex; align-items: center; justify-content: center; flex-shrink:0;}
-        
-        /* 羅盤風向儀樣式 */
-        .wind-compass { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 280px; margin: 10px auto; }
-        .wind-btn { 
-            aspect-ratio: 1/1; height: auto; padding: 0; font-size: 16px; font-weight: bold;
-            display: flex; align-items: center; justify-content: center; background: #333; border: 1px solid #555; border-radius: 8px; color: #ddd; cursor: pointer; transition: 0.2s;
-        }
-        .wind-btn.active { background: var(--accent); color: #000; border-color: #fff; box-shadow: 0 0 10px rgba(255, 183, 77, 0.8); }
-
-        .btn-delete { background: #b71c1c; color: white; border-radius: 4px; padding: 0 12px; font-size: 13px; font-weight: bold; width: auto; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: none;}
-        .medic-entry { background: #252525; padding: 15px; border-radius: 6px; margin-top: 10px; border-left: 4px solid #4caf50; }
-        
+        input[type="number"] { font-family: monospace; }
+        textarea { width: 100%; max-width: 100%; min-width: 0; padding: 10px; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; min-height: 80px; line-height: 1.4; }
+        optgroup { font-weight: bold; color: #ffb74d; background: #333; }
+        option { color: white; background: #2a2a2a; }
+        .btn-main { width: 100%; padding: 0; background: #444; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; height: 55px; min-height: 55px; max-height: 55px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;}
+        .btn-sync-brief, .btn-sync-medic { background: #4caf50; margin-top: 20px; }
+        .btn-export { background: #2196F3; margin-top: 10px; } 
         .list-item { background: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #444; }
-        .list-title { font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 10px; text-align:center;}
-
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); display: flex; border-top: 1px solid #333; z-index: 100000; padding-bottom: env(safe-area-inset-bottom); }
+        .list-title { font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 5px; text-align:center;}
+        .medic-entry { background: #252525; padding: 15px; border-radius: 6px; margin-top: 10px; border-left: 4px solid #4caf50; }
+        .medic-body div { margin-bottom: 5px; font-size: 0.95rem; }
+        .wind-compass { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 280px; margin: 10px auto; }
+        .wind-btn { aspect-ratio: 1/1; height: auto; padding: 0; font-size: 16px; font-weight: bold; display: flex; align-items: center; justify-content: center; background: #333; border: 1px solid #555; border-radius: 8px; color: #ddd; cursor: pointer; transition: 0.2s; }
+        .wind-btn.active { background: var(--accent); color: #000; border-color: #fff; box-shadow: 0 0 10px rgba(255, 183, 77, 0.8); }
+        .btn-delete { background: #b71c1c; color: white; border-radius: 4px; padding: 0 12px; font-size: 13px; font-weight: bold; width: auto; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: none;}
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); display: none; border-top: 1px solid #333; z-index: 100000; padding-bottom: env(safe-area-inset-bottom); }
         .bottom-nav button { flex: 1; padding: 16px 0; background: transparent; border: none; color: #777; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .bottom-nav button.active { color: var(--primary); border-top: 3px solid var(--primary); }
-
         .back-to-top { position: fixed; bottom: 90px; right: 20px; background-color: #555; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.6); cursor: pointer; z-index: 90000; display: none; align-items: center; justify-content: center; opacity: 0.85; }
-
         #sysToast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 30px; font-size: 15px; font-weight: bold; z-index: 999999; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: center; white-space: nowrap; }
-
-        #exportTemplate { position: absolute; left: -9999px; top: -9999px; width: 1000px; background: #ffffff; color: #000000; padding: 30px; box-sizing: border-box; font-family: "微軟正黑體", sans-serif; }
+        #exportTemplate { position: absolute; left: -9999px; top: -9999px; width: 1000px; background: #ffffff; color: #000000; padding: 30px; box-sizing: border-box; font-family: "微軟正黑體", sans-serif; position: relative; overflow: hidden; }
+        .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 55px; font-weight: 900; color: rgba(0, 0, 0, 0.05); z-index: 0; pointer-events: none; user-select: none; white-space: nowrap; letter-spacing: 5px; }
+        .export-content { position: relative; z-index: 1; }
         .export-title { text-align: center; font-size: 32px; font-weight: 900; margin-bottom: 20px; border-bottom: 4px solid #d32f2f; padding-bottom: 10px; color:#d32f2f;}
-        .export-section { margin-bottom: 15px; border: 2px solid #000; border-radius: 8px; overflow: hidden; }
+        .export-section { margin-bottom: 15px; border: 2px solid #000; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.9); }
+        .export-section-title { background: #222; color: #fff; padding: 8px 15px; font-size: 20px; font-weight: bold; }
+        .export-grid { display: grid; grid-template-columns: 1fr 1fr; }
+        .export-row { display: flex; border-bottom: 1px solid #444; }
+        .export-row:last-child { border-bottom: none; }
+        .export-label { background: #e0e0e0; padding: 8px 15px; font-weight: bold; font-size: 16px; color: #000; width: 140px; flex-shrink: 0; border-right: 1px solid #444; display: flex; align-items: center;}
+        .export-val { padding: 8px 15px; flex-grow: 1; font-weight: bold; font-size: 16px; color: #000; display: flex; align-items: center;}
         .export-table { width: 100%; border-collapse: collapse; text-align: center; table-layout: fixed;}
         .export-table th { background: #e0e0e0; padding: 10px 4px; border: 1px solid #444; font-weight: bold; font-size: 15px; color: #000;}
         .export-table td { padding: 10px 4px; border: 1px solid #444; font-weight: bold; font-size: 15px; color: #000; vertical-align: middle;}
+        .photo-upload-btn { background: #2196F3; color: white; padding: 0 12px; border-radius: 4px; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; height: 32px; border: none; line-height: 1;}
     </style>
 </head>
 <body>
 
 <div id="sysToast">✅ 系統提示</div>
-<div id="autoSyncIndicator" style="position:fixed; top:20px; right:20px; background:#4caf50; color:white; padding:8px 15px; border-radius:20px; font-size:14px; font-weight:bold; display:none; z-index:99999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">🔄 雲端自動同步成功</div>
+<div id="autoSyncIndicator" style="position:fixed; top:20px; right:20px; background:#4caf50; color:white; padding:8px 15px; border-radius:20px; font-size:14px; font-weight:bold; display:none; z-index:99999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">🔄 雲端自動備份完成</div>
 <button id="backToTopBtn" class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">⬆️</button>
 
 <div id="page-home" class="page active">
@@ -73,40 +69,72 @@
     <div class="card">
         <h2>建立新專案</h2>
         <div class="grid-2">
-            <div><label>案名</label><input type="text" id="newProjectName" placeholder="案名..."></div>
-            <div><label>ISO姓名</label><input type="text" id="newProjectCreator" placeholder="姓名..."></div>
+            <div><label>專案/災害名稱 <span style="color:#ff5252;">*必填</span></label><input type="text" id="newProjectName" placeholder="例如: 湖口火警"></div>
+            <div><label>創建者(ISO) <span style="color:#ff5252;">*必填</span></label><input type="text" id="newProjectCreator" placeholder="輸入姓名..."></div>
         </div>
         <button id="btnCreateProject" class="btn-main" style="background:var(--primary);" onclick="confirmAction(this, createNewProject)">建立新專案</button>
     </div>
     <div class="card">
-        <h2 style="color:var(--accent);">雲端救災專案 (置頂最新)</h2>
-        <input type="text" id="modifierName" placeholder="載入前請輸入姓名 (操作人員)..." style="margin-bottom:10px; border: 2px solid #ff5252;">
-        <button class="btn-main" style="background:#555; height:48px;" onclick="renderHome()">↻ 重新整理</button>
-        <div id="projectListContainer" style="text-align: center; padding: 10px; color:#aaa;">讀取中...</div>
+        <h2 style="color:var(--accent);">雲端既有救災專案列表</h2>
+        <label style="color:#ff5252; font-weight:bold; overflow:visible;">⚠️ 載入專案前必填</label>
+        <input type="text" id="modifierName" placeholder="請輸入您的姓名 (操作人員)..." style="margin-bottom:10px; border: 2px solid #ff5252;">
+        <button class="btn-main" style="background:#555; height: 48px; min-height: 48px; font-size: 1rem; border-radius:6px; padding:0;" onclick="renderHome()">↻ 重新整理雲端列表</button>
+        <div id="projectListContainer" style="text-align: center; padding: 10px; color:#aaa;">正在讀取雲端資料庫...</div>
     </div>
 </div>
 
 <div id="page-briefing" class="page">
     <div class="card">
         <h2>簡報表 (Briefing List)</h2>
-        <div class="row-full"><label>災害名稱</label><input type="text" id="b_caseName" readonly style="color:var(--accent); font-weight:bold;"></div>
-        <div class="grid-2">
-            <div><label>事故安全官</label><input type="text" id="b_iso"></div>
-            <div><label>初期指揮官</label><input type="text" id="b_ic"></div>
+        <div class="row-full">
+            <label>災害名稱</label><input type="text" id="b_caseName" readonly style="color:#ffb74d; font-weight:bold;">
         </div>
         <div class="grid-2">
-            <div><label>用途</label><select id="b_usage" onchange="toggleUsageOther()"><option value="" disabled selected>選擇...</option><option value="住宅">住宅</option><option value="工廠">工廠</option><option value="鐵皮">鐵皮</option><option value="其他">其他</option></select></div>
-            <div><label>構造</label><select id="b_structure" onchange="toggleStructureOther()"><option value="" disabled selected>選擇...</option><option value="RC">RC</option><option value="鐵皮">鐵皮</option><option value="其他">其他</option></select></div>
+            <div><label>事故安全官(ISO)</label><input type="text" id="b_iso"></div>
+            <div><label>現場初期指揮官</label><input type="text" id="b_ic"></div>
         </div>
-        <input type="text" id="b_usage_other" style="display:none; margin-top:5px;" placeholder="輸入用途">
-        <input type="text" id="b_structure_other" style="display:none; margin-top:5px;" placeholder="輸入構造">
-        <label>單一樓層面積 (換算)</label>
-        <div style="display:flex; gap:10px; align-items:center;">
-            <input type="number" id="b_area_input" placeholder="數字..." style="flex:2;" onblur="convertArea()">
-            <select id="b_area_unit" style="flex:1;" onchange="convertArea()"><option value="m2">㎡</option><option value="ping">坪</option></select>
-            <input type="hidden" id="b_area"> 
+        <div class="grid-2">
+            <div>
+                <label>建築用途</label>
+                <div style="display:flex; gap:5px; flex-direction:column;">
+                    <select id="b_usage" onchange="toggleUsageOther()">
+                        <option value="" disabled selected>請選擇...</option>
+                        <optgroup label="1. 住宅用途"><option value="獨立住宅">獨立住宅</option><option value="透天厝">透天厝</option><option value="公寓">公寓</option><option value="集合住宅">集合住宅</option><option value="宿舍">宿舍</option></optgroup>
+                        <optgroup label="2. 商業用途"><option value="辦公大樓">辦公大樓</option><option value="零售與餐飲空間">零售與餐飲空間</option><option value="住宿服務">住宿服務</option></optgroup>
+                        <optgroup label="3. 工業用途"><option value="工廠 / 廠房">工廠 / 廠房</option><option value="倉庫 / 物流中心">倉庫 / 物流中心</option><option value="科技廠房 / 無塵室">科技廠房 / 無塵室</option></optgroup>
+                        <optgroup label="4. 公共與機構用途"><option value="教育設施">教育設施</option><option value="醫療保健">醫療保健</option><option value="政府與公務機關">政府與公務機關</option><option value="能源設施">能源設施</option></optgroup>
+                        <optgroup label="5. 文化與娛樂用途"><option value="藝文與教育展覽">藝文與教育展覽</option><option value="表演與娛樂">表演與娛樂</option><option value="體育設施">體育設施</option></optgroup>
+                        <optgroup label="6. 交通與基礎設施"><option value="交通設施">交通設施</option></optgroup>
+                        <optgroup label="7. 宗教用途"><option value="信仰中心">信仰中心</option></optgroup>
+                        <optgroup label="8. 農業用途"><option value="農業設施">農業設施</option></optgroup>
+                        <optgroup label="其他"><option value="其他">其他 (自行輸入)</option></optgroup>
+                    </select>
+                    <input type="text" id="b_usage_other" style="display:none; margin-top:5px;" placeholder="請輸入...">
+                </div>
+            </div>
+            <div>
+                <label>構造</label>
+                <div style="display:flex; gap:5px; flex-direction:column;">
+                    <select id="b_structure" onchange="toggleStructureOther()">
+                        <option value="" disabled selected>請選擇...</option>
+                        <option value="RC">RC</option><option value="鐵皮">鐵皮</option><option value="磚造">磚造</option><option value="木造">木造</option><option value="其他">其他</option>
+                    </select>
+                    <input type="text" id="b_structure_other" style="display:none; margin-top:5px;" placeholder="請輸入...">
+                </div>
+            </div>
         </div>
-        <div class="row-full"><label>抵達時間</label><input type="time" id="b_arriveTime"></div>
+        <div class="row-full">
+            <label>單一樓層面積 (自動換算)</label>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <input type="number" id="b_area_input" placeholder="輸入數字..." style="flex:2;" onblur="convertArea()">
+                <select id="b_area_unit" style="flex:1;" onchange="convertArea()">
+                    <option value="m2">平方公尺(㎡)</option>
+                    <option value="ping">坪</option>
+                </select>
+                <input type="hidden" id="b_area"> 
+            </div>
+        </div>
+        <div class="row-full"><label>抵達現場時間</label><input type="time" id="b_arriveTime"></div>
         <div class="row-full"><label>指揮官確認時間</label><input type="time" id="c_time"></div>
         <div class="grid-2">
             <div><label>地上層</label><select id="b_floorUp" class="floor-select"></select></div>
@@ -115,17 +143,17 @@
     </div>
 
     <div class="card">
-        <h2>確認事項</h2>
+        <h2>與指揮官確認事項</h2>
         <div class="grid-2">
-            <div><label>受困</label><select id="c_trappedState"><option value="無">無</option><option value="有">有</option></select></div>
-            <div><label>作業組數</label><select id="c_deployCount" class="num-select"></select></div>
+            <div><label>民眾受困情形</label><select id="c_trappedState"><option value="無">無</option><option value="有">有</option></select></div>
+            <div><label>現場作業組數</label><select id="c_deployCount" class="num-select"></select></div>
         </div>
         <div class="grid-2">
-            <div><label>救出人數</label><select id="c_rescued" class="num-select"></select></div>
-            <div><label>待救人數</label><select id="c_toRescue" class="num-select"></select></div>
+            <div><label>已救出人數</label><select id="c_rescued" class="num-select"></select></div>
+            <div><label>待救人員數</label><select id="c_toRescue" class="num-select"></select></div>
         </div>
         <div class="row-full"><label>待救位置</label><input type="text" id="c_trapLocation" placeholder="無受困則免填"></div>
-        <label>備註</label><textarea id="c_notes" rows="2"></textarea>
+        <div class="row-full"><label>備註欄</label><textarea id="c_notes" rows="2"></textarea></div>
     </div>
 
     <div class="card">
@@ -134,17 +162,18 @@
     </div>
 
     <div class="card">
-        <h2>天氣與風向羅盤</h2>
+        <h2>初次安全簡報與環境</h2>
+        <div class="row-full"><label>初次安全簡報時間</label><input type="time" id="s_time"></div>
         <label>天氣狀況</label>
         <select id="e_weather">
             <option value="" disabled selected>請選擇...</option>
             <option value="☀️ 晴天">☀️ 晴天</option><option value="⛅ 多雲">⛅ 多雲</option><option value="☁️ 陰天">☁️ 陰天</option>
             <option value="🌦️ 小雨">🌦️ 小雨</option><option value="🌧️ 大雨">🌧️ 大雨</option><option value="⛈️ 雷雨">⛈️ 雷雨</option>
+            <option value="💨 強風">💨 強風</option><option value="🌫️ 濃霧">🌫️ 濃霧</option>
         </select>
-        
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px; margin-bottom:10px;">
             <label style="margin:0;">現場風向 (點選羅盤方位)</label>
-            <button class="btn-main" style="width:auto; height:32px; min-height:32px; padding:0 12px; margin:0; background:#ff9800; font-size:13px; color:#000;" onclick="getDeviceCompass()">🧭 手機指向抓取</button>
+            <button class="btn-main" style="width:auto; height:32px; min-height:32px; padding:0 12px; margin:0; background:#ff9800; font-size:13px; color:#000;" onclick="getDeviceCompass()">🧭 GPS羅盤指向抓取</button>
         </div>
         <div class="wind-compass" id="windCompass">
             <button class="wind-btn" onclick="setWind('西北風', this)">NW</button>
@@ -158,64 +187,109 @@
             <button class="wind-btn" onclick="setWind('東南風', this)">SE</button>
         </div>
         <input type="hidden" id="e_wind" value="無風">
-        
-        <label>安全建議</label><textarea id="s_advice" rows="3"></textarea>
-        <div class="row-full"><label>安全簡報時間</label><input type="time" id="s_time"></div>
+        <div class="row-full" style="margin-top: 15px;"><label>初步分析及建議事項</label><textarea id="s_advice" rows="3" placeholder="請輸入建議..."></textarea></div>
     </div>
-
-    <button class="btn-main btn-sync-brief" onclick="syncBriefingToCloud()" style="background:var(--medic);">☁️ 儲存並同步簡報表</button>
-    <button id="btnExportImage" class="btn-main btn-export" onclick="exportToImage()">📸 匯出簡報圖檔</button>
+    <button class="btn-main btn-sync-brief" onclick="syncBriefingToCloud()">☁️ 儲存並同步【簡報表】至雲端</button>
+    <button id="btnExportImage" class="btn-main btn-export" onclick="exportToImage()">📸 匯出【簡報表】圖檔</button>
 </div>
 
 <div id="page-medic" class="page">
     <div class="card" style="border-left-color: var(--medic);">
-        <h2 style="color:var(--medic);">新增 MEDIC 紀錄</h2>
-        <div class="row-full"><label>時間 *</label><input type="time" id="m_time"></div>
-        <label>監控環境(M) *必填(鎖定)</label><textarea id="m_m" placeholder="偵測地點或行動..."></textarea>
-        <label>危險與措施(E/D/I/C)</label><textarea id="m_e"></textarea>
-        <button class="btn-main" onclick="confirmAction(this, addMedicEntry)" style="background:#2196F3;">➕ 加入本地列表</button>
+        <h2 style="color:var(--medic);">新增 MEDIC 資料</h2>
+        <div class="row-full"><label>時間 <span style="color:#ff5252; font-weight:bold;">*必填</span></label><input type="time" id="m_time"></div>
+        <div class="row-full"><label>監控環境與行動 (M) <span style="color:#ff5252; font-weight:bold;">*必填 (加入後無法修改)</span></label><textarea id="m_m" placeholder="偵測的地點或區域..."></textarea></div>
+        <label>評估潛在危險 (E)</label><textarea id="m_e"></textarea>
+        <label>預防措施 (D)</label><textarea id="m_d"></textarea>
+        <label>介入 (I)</label><textarea id="m_i"></textarea>
+        <label>資訊彙整及溝通對象 (C)</label><textarea id="m_c"></textarea>
+        <button class="btn-main" onclick="confirmAction(this, addMedicEntry)" style="background:#2196F3;">➕ 加入至本地列表</button>
     </div>
-    <div id="medicListContainer"></div>
-    <button class="btn-main btn-sync-medic" onclick="syncMedicToCloud()" style="background:var(--medic);">☁️ 儲存同步全部 MEDIC 表</button>
+    <div class="card" style="border-left-color: var(--medic);">
+        <h2 style="color:var(--medic);">MEDIC 事件列表 (本地暫存)</h2>
+        <div id="medicListContainer"></div>
+    </div>
+    <button class="btn-main btn-sync-medic" onclick="syncMedicToCloud()">☁️ 儲存並同步全部【MEDIC表】至雲端</button>
 </div>
 
 <nav class="bottom-nav" id="bottomNav">
-    <button onclick="goHome()">🏠 首頁</button>
+    <button id="nav-home" onclick="goHome()">🏠 換專案</button>
     <button id="nav-briefing" onclick="switchTab('page-briefing')">📋 簡報表</button>
     <button id="nav-medic" onclick="switchTab('page-medic')">✚ MEDIC</button>
 </nav>
 
 <div id="exportTemplate">
-    <div class="export-title">新竹縣消防局 ISO現場簡報表</div>
-    <div class="export-section">
-        <div class="export-grid" style="display:grid; grid-template-columns: 1fr 1fr; border-bottom:1px solid #000;">
-            <div style="border-right:1px solid #000; padding:8px;"><b>案名：</b><span id="exp_caseName"></span></div>
-            <div style="padding:8px;"><b>ISO/IC：</b><span id="exp_iso_ic"></span></div>
+    <div class="watermark">powered by 單柏洋</div>
+    <div class="export-content">
+        <div class="export-title">新竹縣消防局 ISO現場簡報表</div>
+        <div class="export-section">
+            <div class="export-section-title">一、 基本資訊</div>
+            <div class="export-grid">
+                <div class="export-row"><div class="export-label">災害名稱</div><div class="export-val" id="exp_caseName"></div></div>
+                <div class="export-row"><div class="export-label">抵達時間</div><div class="export-val" id="exp_arriveTime"></div></div>
+                <div class="export-row"><div class="export-label">事故安全官(ISO)</div><div class="export-val" id="exp_iso"></div></div>
+                <div class="export-row"><div class="export-label">初期指揮官</div><div class="export-val" id="exp_ic"></div></div>
+                <div class="export-row"><div class="export-label">建築用途</div><div class="export-val" id="exp_usage"></div></div>
+                <div class="export-row"><div class="export-label">建築構造</div><div class="export-val" id="exp_structure"></div></div>
+                <div class="export-row"><div class="export-label">單層面積(㎡)</div><div class="export-val" id="exp_area"></div></div>
+                <div class="export-row"><div class="export-label">樓層分佈</div><div class="export-val" id="exp_floor"></div></div>
+            </div>
         </div>
-        <div class="export-grid" style="display:grid; grid-template-columns: 1fr 1fr;">
-            <div style="border-right:1px solid #000; padding:8px;"><b>受困：</b><span id="exp_trapped"></span></div>
-            <div style="padding:8px;"><b>待救位置：</b><span id="exp_trapLoc"></span></div>
+        <div class="export-section">
+            <div class="export-section-title">二、 與指揮官確認事項</div>
+            <div class="export-grid">
+                <div class="export-row"><div class="export-label">確認時間</div><div class="export-val" id="exp_c_time"></div></div>
+                <div class="export-row"><div class="export-label">作業組數</div><div class="export-val" id="exp_c_deployCount"></div></div>
+                <div class="export-row"><div class="export-label">受困情形</div><div class="export-val" id="exp_c_trappedState"></div></div>
+                <div class="export-row"><div class="export-label">已救出人數</div><div class="export-val" id="exp_c_rescued"></div></div>
+                <div class="export-row"><div class="export-label">待救人數</div><div class="export-val" id="exp_c_toRescue"></div></div>
+                <div class="export-row"><div class="export-label">待救位置</div><div class="export-val" id="exp_c_trapLocation"></div></div>
+            </div>
+            <div class="export-row" style="border-top:1px solid #444;"><div class="export-label">備註</div><div class="export-val" id="exp_c_notes"></div></div>
         </div>
+        <div class="export-section">
+            <div class="export-section-title">三、 初期 360° RECON</div>
+            <table class="export-table" id="exp_reconTable"></table>
+        </div>
+        <div class="export-section">
+            <div class="export-section-title">四、 安全簡報與環境分析</div>
+            <div class="export-grid">
+                <div class="export-row"><div class="export-label">簡報時間</div><div class="export-val" id="exp_s_time"></div></div>
+                <div class="export-row"><div class="export-label">天氣與風向</div><div class="export-val" id="exp_e_weather_wind"></div></div>
+            </div>
+            <div class="export-row" style="border-top:1px solid #444;"><div class="export-label">初步分析及建議</div><div class="export-val" id="exp_s_advice" style="white-space: pre-wrap;"></div></div>
+        </div>
+        <div style="text-align: right; color: #444; font-size: 14px; font-weight:bold; margin-top:10px;" id="exp_printInfo"></div>
     </div>
-    <div class="export-section"><table class="export-table" id="exp_reconTable"></table></div>
-    <div style="text-align: right; color: #444; font-size: 13px; font-weight:bold; margin-top:10px;" id="exp_footer"></div>
 </div>
 
 <script>
+    // ==========================================
+    // ⚠️ 記得替換下方網址 ⚠️
+    // ==========================================
     const GAS_URL = "https://script.google.com/macros/s/AKfycbz4Lf6I0Na-mC940MtkDmD5CfA9WAoCYjy67sY3bQWSKycY45ki67NpHEMenDIr_ic/exec"; 
+    // ==========================================
+    
     const fetchHeaders = { 'Content-Type': 'text/plain;charset=utf-8' };
-    let currentProject = null; let currentModifier = ""; let db = JSON.parse(localStorage.getItem('isoDB')) || {};
+    let currentProject = null;
+    let currentModifier = ""; 
+    let db = JSON.parse(localStorage.getItem('isoDB')) || {};
     window.lastBHash = ""; window.lastMHash = ""; window.autoSyncInterval = null;
+    let isSyncLocked = false; 
 
     function showToast(msg, type = "success") {
-        const t = document.getElementById('sysToast'); t.style.background = type === "error" ? "#d32f2f" : (type === "warning" ? "#ff9800" : "#4caf50");
-        t.innerHTML = msg; t.style.display = "block"; setTimeout(() => { t.style.display = "none"; }, 3000);
+        const t = document.getElementById('sysToast'); 
+        t.style.background = type === "error" ? "#d32f2f" : (type === "warning" ? "#ff9800" : "#4caf50");
+        t.innerHTML = msg; t.style.display = "block"; 
+        setTimeout(() => { t.style.display = "none"; }, 3000);
     }
 
-    function confirmAction(btn, cb, arg) {
-        if (btn.dataset.confirm === "yes") { btn.dataset.confirm = ""; btn.innerText = btn.dataset.ot; btn.style.background = btn.dataset.ob; cb(arg); return; } 
-        btn.dataset.ot = btn.innerText; btn.dataset.ob = btn.style.background; btn.dataset.confirm = "yes"; btn.style.background = "#d32f2f"; btn.innerText = "⚠️ 確定？";
-        setTimeout(() => { if (btn.dataset.confirm === "yes") { btn.dataset.confirm = ""; btn.innerText = btn.dataset.ot; btn.style.background = btn.dataset.ob; } }, 3000);
+    function confirmAction(btn, callback, arg1) {
+        if (btn.dataset.confirm === "yes") {
+            btn.dataset.confirm = ""; btn.innerText = btn.dataset.originalText; btn.style.background = btn.dataset.originalBg; callback(arg1); return;
+        } 
+        btn.dataset.originalText = btn.innerText; btn.dataset.originalBg = btn.style.background; btn.dataset.confirm = "yes";
+        btn.style.background = "#d32f2f"; btn.innerText = "⚠️ 確定操作？";
+        setTimeout(() => { if (btn.dataset.confirm === "yes") { btn.dataset.confirm = ""; btn.innerText = btn.dataset.originalText; btn.style.background = btn.dataset.originalBg; } }, 3000);
     }
 
     function setWind(val, el) {
@@ -226,6 +300,17 @@
     }
 
     function getDeviceCompass() {
+        showToast("📍 啟動 GPS 定位以確保地理方位...", "warning");
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                () => { startCompassProcess(); },
+                () => { showToast("⚠️ GPS 失敗，改用預設磁場方位", "warning"); startCompassProcess(); },
+                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+            );
+        } else { startCompassProcess(); }
+    }
+
+    function startCompassProcess() {
         showToast("🧭 請將手機頂部對準風吹來的方向...", "warning");
         const handleOrientation = function(event) {
             let heading = null;
@@ -249,7 +334,7 @@
                     let t = b.innerText;
                     if ((val==="西北風"&&t==="NW")||(val==="北風"&&t==="N")||(val==="東北風"&&t==="NE")||(val==="西風"&&t==="W")||(val==="東風"&&t==="E")||(val==="西南風"&&t==="SW")||(val==="南風"&&t==="S")||(val==="東南風"&&t==="SE")) { b.classList.add('active'); }
                 });
-                showToast(`✅ 羅盤抓取成功: ${val}`, "success");
+                showToast(`✅ 羅盤方位抓取成功: ${val}`, "success");
                 window.removeEventListener('deviceorientationabsolute', handleOrientation);
                 window.removeEventListener('deviceorientation', handleOrientation);
             }
@@ -258,7 +343,7 @@
         if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
             DeviceOrientationEvent.requestPermission().then(state => {
                 if (state === 'granted') { window.addEventListener('deviceorientation', handleOrientation); } 
-                else { showToast("❌ 羅盤權限被拒絕", "error"); }
+                else { showToast("❌ 羅盤存取權限被拒絕", "error"); }
             }).catch(() => showToast("❌ 無法呼叫電子羅盤", "error"));
         } else {
             window.addEventListener('deviceorientationabsolute', handleOrientation);
@@ -270,180 +355,453 @@
     }
 
     function convertArea() {
-        let input = document.getElementById('b_area_input'); let unit = document.getElementById('b_area_unit'); let hidden = document.getElementById('b_area');
-        let val = parseFloat(input.value); if (isNaN(val)) { hidden.value = ""; return; }
-        if (unit.value === 'ping') {
-            let m2 = (val * 3.305785).toFixed(2); input.value = m2; unit.value = 'm2'; hidden.value = m2; showToast("✅ 已自動單位換算", "success");
-        } else { hidden.value = val; }
+        let inputEl = document.getElementById('b_area_input'); let unitEl = document.getElementById('b_area_unit'); let hiddenEl = document.getElementById('b_area');
+        let val = parseFloat(inputEl.value);
+        if (isNaN(val)) { hiddenEl.value = ""; return; }
+        if (unitEl.value === 'ping') {
+            let m2Val = (val * 3.305785).toFixed(2); inputEl.value = m2Val; unitEl.value = 'm2'; hiddenEl.value = m2Val; showToast("✅ 已自動單位換算 (坪 → ㎡)", "success");
+        } else { hiddenEl.value = val; }
     }
 
+    window.onscroll = function() { document.getElementById("backToTopBtn").style.display = (document.documentElement.scrollTop > 200) ? "flex" : "none"; };
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    function toggleStructureOther() { const s = document.getElementById('b_structure'); const o = document.getElementById('b_structure_other'); o.style.display = (s.value === '其他') ? 'block' : 'none'; if(s.value !== '其他') o.value = ''; }
+    function toggleUsageOther() { const s = document.getElementById('b_usage'); const o = document.getElementById('b_usage_other'); o.style.display = (s.value === '其他') ? 'block' : 'none'; if(s.value !== '其他') o.value = ''; }
+
     function initSelects() {
-        let f = ''; for(let i=0; i<=50; i++) f += `<option value="${i}">${i}</option>`;
-        document.querySelectorAll('.floor-select, .num-select').forEach(el => el.innerHTML = f);
+        let fOpts = ''; for(let i=0; i<=50; i++) fOpts += `<option value="${i}">${i}</option>`;
+        document.querySelectorAll('.floor-select, .num-select').forEach(el => el.innerHTML = fOpts);
+        
         const faces = ["第一面", "第二面", "第三面", "第四面"]; let rHtml = '';
         faces.forEach((face, idx) => {
             rHtml += `
             <div style="background:#252525; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #444;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                     <h3 style="margin:0; color:#ff5252;">${face}</h3>
-                    <label class="photo-upload-btn" onclick="document.getElementById('file_${idx}').click()">📸 拍照</label>
-                    <input type="file" id="file_${idx}" accept="image/*" capture="environment" style="display:none;" onchange="uploadReconPhoto(${idx}, this)">
+                    <label class="photo-upload-btn">📸 現場拍照<input type="file" accept="image/*" capture="environment" style="display:none;" onchange="uploadReconPhoto(${idx}, this)"></label>
                 </div>
-                <input type="hidden" id="r_${idx}_photo_url"><input type="hidden" id="r_${idx}_photo_id">
-                <div id="r_${idx}_photo_status" style="font-size:12px; text-align:right; margin-bottom:10px;"></div>
-                <div class="grid-2"><div><label>樓層</label><select id="r_${idx}_floor" class="floor-select"></select></div><div><label>組數</label><select id="r_${idx}_teams" class="num-select"></select></div></div>
-                <div class="grid-2"><div><label>火勢</label><select id="r_${idx}_fire"><option value="0無">0</option><option value="1火光">1</option><option value="2火舌">2</option><option value="3延燒">3</option></select></div><div><label>煙霧</label><select id="r_${idx}_smoke"><option value="0無">0</option><option value="1小">1</option><option value="2大">2</option></select></div></div>
-                <div class="grid-2"><div><label>門</label><select id="r_${idx}_door"><option value="無">無</option><option value="有">有</option></select></div><div><label>窗</label><select id="r_${idx}_window"><option value="無">無</option><option value="有">有</option></select></div></div>
+                <input type="hidden" id="r_${idx}_photo_url"><input type="hidden" id="r_${idx}_photo_id"><input type="hidden" id="r_${idx}_photo_formula">
+                <div id="r_${idx}_photo_status" style="font-size:13px; text-align:right; margin-bottom:10px; word-break:break-all;"></div>
+                <div class="grid-2">
+                    <div><label>樓層數</label><select id="r_${idx}_floor" class="floor-select"></select></div>
+                    <div><label>消防組數</label><select id="r_${idx}_teams" class="num-select"></select></div>
+                </div>
+                <div class="grid-2">
+                    <div><label>火勢</label><select id="r_${idx}_fire"><option value="0無">0無</option><option value="1火光">1火光</option><option value="2火舌">2火舌</option><option value="3延燒">3延燒</option></select></div>
+                    <div><label>煙霧</label><select id="r_${idx}_smoke"><option value="0無">0無</option><option value="1小">1小</option><option value="2大">2大</option></select></div>
+                </div>
+                <div class="grid-2">
+                    <div><label>門</label><select id="r_${idx}_door"><option value="無">無</option><option value="有">有</option></select></div>
+                    <div><label>窗</label><select id="r_${idx}_window"><option value="無">無</option><option value="有">有</option></select></div>
+                </div>
                 <div class="row-full"><label>風險</label><input type="text" id="r_${idx}_risk" placeholder="無風險則免填"></div>
                 <div class="row-full"><label>完成時間</label><input type="time" id="r_${idx}_time"></div>
             </div>`;
         });
         document.getElementById('reconContainer').innerHTML = rHtml;
+        document.querySelectorAll('.floor-select, .num-select').forEach(el => { if(el.options.length === 0) el.innerHTML = fOpts; });
     }
 
-    function uploadReconPhoto(idx, el) {
-        const file = el.files[0]; if (!file) return;
-        document.getElementById(`r_${idx}_photo_status`).innerText = "⏳ 處理中...";
+    function uploadReconPhoto(idx, inputElement) {
+        const file = inputElement.files[0]; if (!file) return;
+        const statusEl = document.getElementById(`r_${idx}_photo_status`);
+        statusEl.innerHTML = "<span style='color:#ffb74d;'>⏳ 影像處理與上傳中...</span>";
+        
         const reader = new FileReader();
         reader.onload = function(e) {
             const img = new Image();
             img.onload = function() {
                 const canvas = document.createElement('canvas'); const MAX_W = 600; let w = img.width, h = img.height;
                 if (w > MAX_W) { h = h * (MAX_W / w); w = MAX_W; }
-                canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                const b64 = canvas.toDataURL('image/jpeg', 0.6).split(',')[1];
-                fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'uploadPhoto', projectName: currentProject, filename: `R_${idx}.jpg`, mimeType: 'image/jpeg', base64: b64 }) })
-                .then(r=>r.json()).then(res => {
-                    document.getElementById(`r_${idx}_photo_url`).value = res.url;
-                    document.getElementById(`r_${idx}_photo_status`).innerHTML = `<a href="${res.url}" target="_blank" style="color:#4caf50; font-weight:bold;">🔗 查看照片</a>`;
-                    saveBriefingToLocal(); showToast(`✅ 上傳成功`);
+                canvas.width = w; canvas.height = h;
+                const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, w, h);
+                const fullBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                const base64Data = fullBase64.split(',')[1];
+
+                fetch(GAS_URL + "?t=" + new Date().getTime(), {
+                    method: 'POST', headers: fetchHeaders,
+                    body: JSON.stringify({ action: 'uploadPhoto', projectName: currentProject, filename: `R_${idx}_${Date.now()}.jpg`, mimeType: 'image/jpeg', base64: base64Data }), redirect: 'follow'
+                }).then(r=>r.json()).then(res => {
+                    if (res.error) { showToast("❌ 系統錯誤", "error"); return statusEl.innerHTML = `<span style='color:#d32f2f;'>❌ 系統錯誤</span>`; }
+                    document.getElementById(`r_${idx}_photo_url`).value = res.url; document.getElementById(`r_${idx}_photo_formula`).value = res.formula;
+                    statusEl.innerHTML = `<a href="${res.url}" target="_blank" style="color:#4caf50; text-decoration:underline; font-weight:bold;">🔗 點此查看雲端照片</a>`;
+                    saveBriefingToLocal(); showToast(`✅ 第${idx+1}面照片上傳成功！`, "success");
+                }).catch(err => { 
+                    statusEl.innerHTML = `<span style='color:#d32f2f;'>❌ 上傳失敗，請確認網路</span>`; showToast("❌ 照片上傳異常", "error");
                 });
             }; img.src = e.target.result;
         }; reader.readAsDataURL(file);
     }
 
-    async function openProject(name, btn, isNew = false) {
-        if (!isNew) { currentModifier = document.getElementById('modifierName').value.trim(); if (!currentModifier) { showToast("⚠️ 請輸入姓名", "error"); return; } }
-        currentProject = name; document.getElementById('b_caseName').value = name; document.getElementById('bottomNav').style.display = 'flex';
-        const resp = await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'getProjectData', projectName: name }) });
-        const data = await resp.json(); db[name] = data; localStorage.setItem('isoDB', JSON.stringify(db));
+    function clearAllForms() {
+        const b_ids = ['b_iso', 'b_ic', 'b_usage', 'b_usage_other', 'b_structure', 'b_structure_other', 'b_arriveTime', 'b_floorUp', 'b_floorDown', 'c_time', 'c_trappedState', 'c_deployCount', 'c_rescued', 'c_toRescue', 'c_trapLocation', 'c_notes', 's_time', 's_advice', 'e_weather', 'e_wind'];
+        b_ids.forEach(id => { const el = document.getElementById(id); if(el) { if(el.tagName==='SELECT') el.selectedIndex=0; else el.value=''; } });
+        document.getElementById('b_structure_other').style.display = 'none'; document.getElementById('b_usage_other').style.display = 'none';
         
-        Object.keys(data.briefing).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = data.briefing[k]; });
-        if(data.briefing['b_area']) document.getElementById('b_area_input').value = data.briefing['b_area'];
-        
-        let windVal = data.briefing['e_wind'] || "無風";
-        document.getElementById('e_wind').value = windVal;
-        document.querySelectorAll('.wind-btn').forEach(b => { 
-            b.classList.remove('active');
-            let t = b.innerText;
-            if (windVal===t || (windVal==="西北風"&&t==="NW")||(windVal==="北風"&&t==="N")||(windVal==="東北風"&&t==="NE")||(windVal==="西風"&&t==="W")||(windVal==="東風"&&t==="E")||(windVal==="西南風"&&t==="SW")||(windVal==="南風"&&t==="S")||(windVal==="東南風"&&t==="SE")||(windVal==="無風"&&t==="無")) {
-                b.classList.add('active');
-            }
-        });
+        document.getElementById('b_area_input').value = ''; document.getElementById('b_area_unit').selectedIndex = 0; document.getElementById('b_area').value = '';
 
-        for(let i=0; i<4; i++) { if (db[name].briefing[`r_${i}_photo_url`]) document.getElementById(`r_${i}_photo_status`).innerHTML=`<a href="${db[name].briefing[`r_${i}_photo_url`]}" target="_blank" style="color:#4caf50; font-weight:bold;">🔗 載入歷史影像</a>`; }
-        window.lastBHash = JSON.stringify(db[currentProject].briefing); window.lastMHash = JSON.stringify(db[currentProject].medic);
-        startAutoSync(); switchTab('page-briefing'); showToast("✅ 專案載入成功");
+        for(let i=0; i<4; i++) {
+            ['floor', 'teams', 'fire', 'smoke', 'door', 'window', 'risk', 'time', 'photo_url', 'photo_id', 'photo_formula'].forEach(f => {
+                const el = document.getElementById(`r_${i}_${f}`); if(el) { if(el.tagName==='SELECT') el.selectedIndex=0; else el.value=''; }
+            });
+            document.getElementById(`r_${i}_photo_status`).innerHTML = '';
+        }
+        ['m_time', 'm_m', 'm_e', 'm_d', 'm_i', 'm_c'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
+    }
+
+    function saveDB() { localStorage.setItem('isoDB', JSON.stringify(db)); }
+
+    async function createNewProject() {
+        const name = document.getElementById('newProjectName').value.trim();
+        const creator = document.getElementById('newProjectCreator').value.trim();
+        const btn = document.getElementById('btnCreateProject');
+        
+        if(!name || !creator) return showToast("⚠️ 請輸入完整專案名稱與創建者姓名", "error");
+        currentModifier = creator;
+        btn.innerText = "⏳ 專案建立中..."; btn.disabled = true; btn.style.background = "#555";
+
+        db[name] = { creator: creator, briefing: {}, medic: [] }; saveDB();
+        if (!GAS_URL.includes("請在這裡貼上")) {
+            try {
+                const req = await fetch(GAS_URL + "?t=" + new Date().getTime(), { method: 'POST', headers: fetchHeaders, body: JSON.stringify({ action: 'createProject', projectName: name, creator: creator, modifier: currentModifier }), redirect: 'follow' });
+                const res = await req.json();
+                if(res.error) showToast("❌ 建立專案失敗：" + res.error, "error");
+                else showToast("✅ 專案建立成功！", "success");
+            } catch (e) { showToast("❌ 建立專案連線異常", "error"); }
+        }
+        btn.innerText = "建立新專案"; btn.disabled = false; btn.style.background = "var(--primary)";
+        document.getElementById('newProjectName').value = ''; document.getElementById('newProjectCreator').value = '';
+        openProject(name, null, true); 
+    }
+
+    async function openProject(name, btnElement, isNew = false) {
+        try {
+            if (!isNew) {
+                const modInput = document.getElementById('modifierName'); const modName = modInput.value.trim();
+                if (!modName) {
+                    modInput.style.border = "3px solid #ff5252"; modInput.style.backgroundColor = "#4a0000"; modInput.value = "";
+                    modInput.placeholder = "⚠️ 點擊前，請務必先輸入您的姓名！"; modInput.focus();
+                    showToast("⚠️ 請先輸入操作人員姓名", "error");
+                    setTimeout(() => { modInput.style.border = "1px solid #444"; modInput.style.backgroundColor = "#2a2a2a"; modInput.placeholder = "請輸入您的姓名 (操作人員)..."; }, 3000);
+                    return; 
+                }
+                currentModifier = modName;
+            }
+
+            isSyncLocked = true; 
+            currentProject = name; document.getElementById('b_caseName').value = name;
+            if (btnElement) { btnElement.innerText = "⏳ 雲端下載中..."; btnElement.disabled = true; btnElement.style.background = "#555"; }
+
+            clearAllForms(); 
+            if (!db[name]) db[name] = { briefing: {}, medic: [] };
+
+            if (!GAS_URL.includes("請在這裡貼上")) {
+                try {
+                    const resp = await fetch(GAS_URL + "?t=" + new Date().getTime(), { method: 'POST', headers: fetchHeaders, body: JSON.stringify({ action: 'getProjectData', projectName: name }), redirect: 'follow' });
+                    const text = await resp.text();
+                    try {
+                        const cloudData = JSON.parse(text);
+                        if(cloudData.error) { showToast("❌ 下載資料失敗：" + cloudData.error, "error"); } 
+                        else {
+                            if (cloudData.creator) db[name].creator = cloudData.creator;
+                            if (cloudData.briefing && Object.keys(cloudData.briefing).length > 0) db[name].briefing = cloudData.briefing;
+                            if (cloudData.medic && cloudData.medic.length > 0) db[name].medic = cloudData.medic;
+                            saveDB(); if(!isNew) showToast("✅ 雲端資料下載成功", "success");
+                        }
+                    } catch (parseErr) { showToast("⚠️ 資料格式錯誤，已載入本地暫存", "warning"); }
+                } catch (netErr) { showToast("⚠️ 網路斷線，已載入本地暫存", "warning"); }
+            }
+
+            if(db[name] && db[name].briefing) {
+                Object.keys(db[name].briefing).forEach(key => { const el = document.getElementById(key); if(el) el.value = db[name].briefing[key]; });
+                toggleStructureOther(); toggleUsageOther(); 
+                
+                if (document.getElementById('b_area_input') && db[name].briefing['b_area_input']) {
+                    document.getElementById('b_area_input').value = db[name].briefing['b_area_input'];
+                    if (db[name].briefing['b_area_unit']) document.getElementById('b_area_unit').value = db[name].briefing['b_area_unit'];
+                }
+                
+                let weatherVal = db[name].briefing['e_weather'] || "";
+                document.getElementById('e_weather').value = weatherVal;
+
+                let windVal = db[name].briefing['e_wind'] || "無風";
+                document.getElementById('e_wind').value = windVal;
+                document.querySelectorAll('.wind-btn').forEach(b => { 
+                    b.classList.remove('active');
+                    let t = b.innerText;
+                    if (windVal===t || (windVal==="西北風"&&t==="NW")||(windVal==="北風"&&t==="N")||(windVal==="東北風"&&t==="NE")||(windVal==="西風"&&t==="W")||(windVal==="東風"&&t==="E")||(windVal==="西南風"&&t==="SW")||(windVal==="南風"&&t==="S")||(windVal==="東南風"&&t==="SE")||(windVal==="無風"&&t==="無")) {
+                        b.classList.add('active');
+                    }
+                });
+
+                for(let i=0; i<4; i++) {
+                    if (db[name].briefing[`r_${i}_photo_url`] && db[name].briefing[`r_${i}_photo_url`] !== "") {
+                        document.getElementById(`r_${i}_photo_status`).innerHTML = `<a href="${db[name].briefing[`r_${i}_photo_url`]}" target="_blank" style="color:#4caf50; text-decoration:underline; font-weight:bold;">🔗 點此查看雲端照片</a>`;
+                    }
+                }
+            }
+            
+            if(!document.getElementById('b_iso').value && db[name] && db[name].creator) document.getElementById('b_iso').value = db[name].creator;
+            
+            window.lastBHash = JSON.stringify(db[name].briefing || {}); 
+            window.lastMHash = JSON.stringify(db[name].medic || []);
+            
+            isSyncLocked = false;
+            startAutoSync(); 
+            switchTab('page-briefing');
+            
+            if (btnElement) { btnElement.innerText = "📂 下載並開啟專案"; btnElement.disabled = false; btnElement.style.background = "#1565c0"; }
+        } catch(fatalErr) {
+            isSyncLocked = false;
+            showToast("❌ 系統嚴重錯誤：" + fatalErr.message, "error");
+            if (btnElement) { btnElement.innerText = "⚠️ 開啟失敗"; btnElement.disabled = false; btnElement.style.background = "#d32f2f"; }
+        }
     }
 
     function startAutoSync() {
         if(window.autoSyncInterval) clearInterval(window.autoSyncInterval);
         window.autoSyncInterval = setInterval(() => {
-            if (!currentProject || !currentModifier) return;
-            saveBriefingToLocal(); const curB = JSON.stringify(db[currentProject].briefing); const curM = JSON.stringify(db[currentProject].medic || []);
-            if (curB === window.lastBHash && curM === window.lastMHash) return;
-            window.lastBHash = curB; window.lastMHash = curM;
-            fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'saveBriefing', projectName: currentProject, modifier: currentModifier + "(自)", briefing: db[currentProject].briefing, overwrite: false }) });
-            fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'saveMedic', projectName: currentProject, modifier: currentModifier + "(自)", medic: db[currentProject].medic, overwrite: false }) }).then(() => { document.getElementById('autoSyncIndicator').style.display='block'; setTimeout(()=>document.getElementById('autoSyncIndicator').style.display='none', 3000); });
+            if (!currentProject || !currentModifier || isSyncLocked || GAS_URL.includes("請在這裡貼上")) return;
+            saveBriefingToLocal();
+            
+            const curB = JSON.stringify(db[currentProject].briefing); let changedB = (curB !== window.lastBHash);
+            const curM = JSON.stringify(db[currentProject].medic || []); let changedM = (curM !== window.lastMHash);
+            if (!changedB && !changedM) return; 
+            
+            if (changedB) window.lastBHash = curB;
+            if (changedM) window.lastMHash = curM;
+
+            const dUrl = GAS_URL + "?t=" + new Date().getTime();
+            let promises = [];
+            if (changedB) {
+                let payload = JSON.parse(JSON.stringify(db[currentProject].briefing));
+                promises.push(fetch(dUrl, { method: 'POST', headers: fetchHeaders, body: JSON.stringify({ action: 'saveBriefing', projectName: currentProject, creator: db[currentProject].creator, modifier: currentModifier + "(自)", briefing: payload, overwrite: false }), redirect: 'follow' }).catch(()=>{}));
+            }
+            if (changedM) {
+                promises.push(fetch(dUrl, { method: 'POST', headers: fetchHeaders, body: JSON.stringify({ action: 'saveMedic', projectName: currentProject, creator: db[currentProject].creator, modifier: currentModifier + "(自)", medic: db[currentProject].medic || [], overwrite: false }), redirect: 'follow' }).catch(()=>{}));
+            }
+
+            Promise.all(promises).then(() => {
+                const ind = document.getElementById('autoSyncIndicator'); ind.style.display = 'block'; setTimeout(()=>ind.style.display='none', 3000);
+            });
         }, 15000);
     }
 
     async function syncBriefingToCloud() {
-        saveBriefingToLocal();
-        await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'saveBriefing', projectName: currentProject, modifier: currentModifier, briefing: db[currentProject].briefing, overwrite: false }) });
-        window.lastBHash = JSON.stringify(db[currentProject].briefing); showToast("✅ 同步置頂成功");
+        if (!currentProject) return showToast("⚠️ 請先開啟專案", "error"); 
+        saveBriefingToLocal(); window.lastBHash = JSON.stringify(db[currentProject].briefing); 
+        
+        let payload = JSON.parse(JSON.stringify(db[currentProject].briefing));
+        const btn = document.querySelector('.btn-sync-brief'); btn.innerText = "☁️ 簡報表同步中...";
+        try {
+            const req = await fetch(GAS_URL + "?t=" + new Date().getTime(), { method: 'POST', headers: fetchHeaders, body: JSON.stringify({ action: 'saveBriefing', projectName: currentProject, creator: db[currentProject].creator, modifier: currentModifier, briefing: payload, overwrite: false }), redirect: 'follow' });
+            const res = await req.json(); if(res.error) throw new Error(res.error);
+            showToast("✅ 簡報表手動同步完成！", "success");
+        } catch (e) { showToast("❌ 同步錯誤: " + e.message, "error"); }
+        btn.innerText = "☁️ 儲存並同步【簡報表】至雲端";
     }
 
     async function syncMedicToCloud() {
-        await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'saveMedic', projectName: currentProject, modifier: currentModifier, medic: db[currentProject].medic, overwrite: false }) });
-        window.lastMHash = JSON.stringify(db[currentProject].medic); showToast("✅ MEDIC 同步成功");
+        if (!currentProject) return showToast("⚠️ 請先開啟專案", "error"); 
+        window.lastMHash = JSON.stringify(db[currentProject].medic || []); 
+        const btn = document.querySelector('.btn-sync-medic'); btn.innerText = "☁️ MEDIC 同步中...";
+        try {
+            const req = await fetch(GAS_URL + "?t=" + new Date().getTime(), { method: 'POST', headers: fetchHeaders, body: JSON.stringify({ action: 'saveMedic', projectName: currentProject, creator: db[currentProject].creator, modifier: currentModifier, medic: db[currentProject].medic, overwrite: false }), redirect: 'follow' });
+            const res = await req.json(); if(res.error) throw new Error(res.error);
+            showToast("✅ MEDIC 事件手動同步完成！", "success");
+        } catch (e) { showToast("❌ 同步錯誤: " + e.message, "error"); }
+        btn.innerText = "☁️ 儲存並同步全部【MEDIC表】至雲端";
     }
 
-    function addMedicEntry() {
-        let t = document.getElementById('m_time').value; let m = document.getElementById('m_m').value.trim();
-        if(!t || !m) return showToast("⚠️ 時間與(M)必填", "error");
-        db[currentProject].medic.push({ id: Date.now(), time: t, m: m, e: document.getElementById('m_e').value, completed: false, deleted: false });
-        document.getElementById('m_m').value = ''; document.getElementById('m_e').value = ''; 
-        localStorage.setItem('isoDB', JSON.stringify(db)); renderMedicList(); showToast("✅ 加入成功");
-    }
-
-    function renderMedicList() {
-        const container = document.getElementById('medicListContainer'); container.innerHTML = '';
-        db[currentProject].medic.forEach((m, idx) => {
-            if (m.deleted) return; const isL = m.completed; const dAttr = isL ? 'disabled' : '';
-            const delBtn = isL ? '' : `<button class="btn-delete" style="height:36px;" onclick="confirmAction(this, (i)=>{db[currentProject].medic[i].deleted=true;renderMedicList();}, ${idx})">🗑️ 刪除</button>`;
-            const closeBtn = isL ? `<span style="color:#4caf50;">🔒 已結案</span>` : `<button class="btn-delete" style="background:#ff9800; height:36px;" onclick="db[currentProject].medic[${idx}].completed=true;renderMedicList();">✅ 結案</button>`;
-            const syncBtn = isL ? '' : `<button class="nav-btn" style="width:auto; height:36px; padding:0 12px; background:#2196F3; font-size:14px; font-weight:bold; border:none; display:inline-flex; align-items:center;" onclick="confirmAction(this, i=>{syncSingleMedicToCloud(i);}, ${idx})">☁️ 同步</button>`;
-            container.innerHTML += `
-            <div class="medic-entry" style="background:${isL?'#1a3b1a':'#252525'};">
-                <div class="medic-header">
-                    <div style="display:flex; align-items:center; gap:8px;"><span style="font-weight:bold;">時間:</span><input type="time" value="${m.time}" disabled style="width:130px; height:36px; background:#333;"></div>
-                    <div style="display:flex; gap:8px;">${syncBtn} ${delBtn} ${closeBtn}</div>
-                </div>
-                <div class="medic-body">
-                    <div><b>[M]</b> <input type="text" value="${m.m}" disabled style="background:#1a1a1a; color:#888;"></div>
-                    <div><b>[E/D/I/C]</b> <textarea ${dAttr} onchange="db[currentProject].medic[${idx}].e=this.value;saveLocal();">${m.e}</textarea></div>
-                </div>
-            </div>`;
-        });
+    async function syncSingleMedicToCloud(index) {
+        if (!currentProject) return;
+        try {
+            const req = await fetch(GAS_URL + "?t=" + new Date().getTime(), { method: 'POST', headers: fetchHeaders, body: JSON.stringify({ action: 'saveMedic', projectName: currentProject, creator: db[currentProject].creator, modifier: currentModifier, medic: [db[currentProject].medic[index]], overwrite: false }), redirect: 'follow' });
+            const res = await req.json(); if(res.error) throw new Error(res.error);
+            showToast("✅ 單筆 MEDIC 紀錄同步成功！", "success");
+        } catch (e) { showToast("❌ 單筆同步失敗: " + e.message, "error"); }
     }
 
     function exportToImage() {
-        const btn = document.getElementById('btnExportImage'); btn.innerText = "⏳ 處理中...";
-        const v = (id) => document.getElementById(id).value || '未填寫';
-        document.getElementById('exp_caseName').innerText = currentProject;
-        document.getElementById('exp_iso_ic').innerText = `ISO: ${v('b_iso')} / 指揮官: ${v('b_ic')}`;
-        
-        let trapSt = v('c_trappedState'); document.getElementById('exp_trapped').innerHTML = (trapSt === '有') ? `<span style="color:#d32f2f; font-weight:900;">⚠️ 有</span>` : trapSt;
-        let loc = v('c_trapLocation'); document.getElementById('exp_trapLoc').innerHTML = (loc !== '未填寫' && loc !== '') ? `<span style="color:#d32f2f; font-weight:900;">${loc}</span>` : '無';
-        
-        let rHtml = '<tr><th width="8%">面向</th><th width="8%">樓</th><th width="8%">組</th><th width="8%">火</th><th width="8%">煙</th><th width="8%">門</th><th width="8%">窗</th><th width="22%">風險</th><th width="12%">時間</th><th width="10%">照片</th></tr>';
-        ["第一面", "第二面", "第三面", "第四面"].forEach((face, i) => {
-            const hasP = document.getElementById(`r_${i}_photo_url`).value !== "";
-            rHtml += `<tr><td style="font-weight:bold;">${face}</td><td>${v('r_'+i+'_floor')}</td><td>${v('r_'+i+'_teams')}</td><td>${v('r_'+i+'_fire')}</td><td>${v('r_'+i+'_smoke')}</td><td>${v('r_'+i+'_door')}</td><td>${v('r_'+i+'_window')}</td><td>${v('r_'+i+'_risk')}</td><td>${v('r_'+i+'_time')}</td><td style="color:${hasP?'#2196F3':'#888'};">${hasP?'[雲端有]':'無'}</td></tr>`;
-        });
-        document.getElementById('exp_reconTable').innerHTML = rHtml;
-        document.getElementById('exp_footer').innerText = `匯出人員：${currentModifier} | ${new Date().toLocaleString()}`;
+        if (!currentProject) return showToast("⚠️ 請先開啟專案！", "error"); 
+        saveBriefingToLocal(); 
+        const btn = document.getElementById('btnExportImage'); btn.innerText = "⏳ 正在處理圖檔排版...";
 
-        setTimeout(() => { html2canvas(document.getElementById('exportTemplate'), { scale: 2 }).then(canvas => {
-            const link = document.createElement('a'); link.download = `ISO_${currentProject}.png`;
-            link.href = canvas.toDataURL(); link.click(); btn.innerText = "📸 匯出簡報圖檔";
-        }); }, 500);
+        const v = (id) => document.getElementById(id).value || '未填寫';
+        document.getElementById('exp_caseName').innerText = v('b_caseName');
+        document.getElementById('exp_arriveTime').innerText = v('b_arriveTime');
+        document.getElementById('exp_iso').innerText = v('b_iso');
+        document.getElementById('exp_ic').innerText = v('b_ic');
+        document.getElementById('exp_usage').innerText = v('b_usage')==='其他'?v('b_usage_other'):v('b_usage');
+        document.getElementById('exp_structure').innerText = v('b_structure')==='其他'?v('b_structure_other'):v('b_structure');
+        let areaVal = v('b_area'); document.getElementById('exp_area').innerText = (areaVal && areaVal !== '未填寫') ? areaVal : '未填寫';
+        document.getElementById('exp_floor').innerText = `地上 ${v('b_floorUp')} 層 / 地下 ${v('b_floorDown')} 層`;
+        document.getElementById('exp_c_time').innerText = v('c_time');
+        document.getElementById('exp_c_deployCount').innerText = v('c_deployCount');
+        
+        let trappedState = v('c_trappedState');
+        if(trappedState === '有') { document.getElementById('exp_c_trappedState').innerHTML = `<span style="color:#d32f2f; font-weight:900;">${trappedState}</span>`; } else { document.getElementById('exp_c_trappedState').innerText = trappedState; }
+        document.getElementById('exp_c_rescued').innerText = `${v('c_rescued')} 人`;
+        document.getElementById('exp_c_toRescue').innerHTML = `<span style="color:#d32f2f; font-weight:900;">${v('c_toRescue')} 人</span>`;
+        
+        let trapLoc = v('c_trapLocation');
+        if(trapLoc !== '未填寫' && trapLoc !== '') { document.getElementById('exp_c_trapLocation').innerHTML = `<span style="color:#d32f2f; font-weight:900;">${trapLoc}</span>`; } else { document.getElementById('exp_c_trapLocation').innerHTML = `無`; }
+        document.getElementById('exp_c_notes').innerText = v('c_notes');
+
+        let reconTableHtml = `<tr><th width="8%">面向</th><th width="8%">樓層</th><th width="8%">組數</th><th width="8%">火勢</th><th width="8%">煙</th><th width="8%">門</th><th width="8%">窗</th><th width="22%">風險</th><th width="12%">完成時間</th><th width="10%">照片</th></tr>`;
+        const faces = ["第一面", "第二面", "第三面", "第四面"];
+        for(let i=0; i<4; i++) {
+            let fire = v(`r_${i}_fire`); let smoke = v(`r_${i}_smoke`); let risk = v(`r_${i}_risk`);
+            let fireFmt = (parseInt(fire.charAt(0)) >= 2) ? `<span style="color:#d32f2f; font-weight:900;">${fire}</span>` : fire;
+            let smokeFmt = (parseInt(smoke.charAt(0)) >= 2) ? `<span style="color:#d32f2f; font-weight:900;">${smoke}</span>` : smoke;
+            let riskFmt = (risk !== '未填寫' && risk !== '') ? `<span style="background-color:#fff9c4; color:#d32f2f; padding:2px 6px; border:2px solid #ffb74d; border-radius:4px;">${risk}</span>` : '無';
+            let photoUrl = v(`r_${i}_photo_url`);
+            let imgHtml = (photoUrl && photoUrl !== '未填寫' && photoUrl !== '') ? '<div style="color:#2196F3; font-weight:bold; font-size:12px;">[雲端有照片]</div>' : '<div style="color:#888; font-size:12px;">無照片</div>';
+
+            reconTableHtml += `<tr><td style="font-weight:bold;">${faces[i]}</td><td>${v(`r_${i}_floor`)}</td><td>${v(`r_${i}_teams`)}</td><td>${fireFmt}</td><td>${smokeFmt}</td><td>${v(`r_${i}_door`)}</td><td>${v(`r_${i}_window`)}</td><td>${riskFmt}</td><td>${v(`r_${i}_time`)}</td><td>${imgHtml}</td></tr>`;
+        }
+        document.getElementById('exp_reconTable').innerHTML = reconTableHtml;
+
+        document.getElementById('exp_s_time').innerText = v('s_time');
+        document.getElementById('exp_e_weather_wind').innerText = `${v('e_weather')} / 風向: ${v('e_wind')}`;
+        document.getElementById('exp_s_advice').innerText = v('s_advice');
+        document.getElementById('exp_printInfo').innerText = `產出時間：${new Date().toLocaleString()} ｜ 匯出人員：${currentModifier}`;
+
+        setTimeout(() => {
+            const element = document.getElementById('exportTemplate');
+            html2canvas(element, { scale: 2, backgroundColor: "#ffffff" }).then(canvas => {
+                const link = document.createElement('a'); link.download = `[ISO簡報表] ${currentProject}.png`;
+                link.href = canvas.toDataURL("image/png"); link.click(); btn.innerText = "📸 匯出【簡報表】圖檔"; showToast("✅ 圖檔生成完畢，準備下載！", "success");
+            }).catch(err => { showToast("❌ 圖檔產出失敗", "error"); btn.innerText = "📸 匯出【簡報表】圖檔"; });
+        }, 500); 
+    }
+
+    function switchTab(pageId) {
+        if (!currentProject && pageId !== 'page-home') return showToast("⚠️ 請先建立或開啟專案", "error");
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        const bottomNav = document.getElementById('bottomNav');
+        if (pageId === 'page-home') { bottomNav.style.display = 'none'; } else {
+            bottomNav.style.display = 'flex';
+            document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+            if (pageId === 'page-briefing') document.getElementById('nav-briefing').classList.add('active');
+            if (pageId === 'page-medic') document.getElementById('nav-medic').classList.add('active');
+        }
+        if(pageId === 'page-medic') renderMedicList(); scrollToTop(); 
+    }
+    
+    function goHome() { currentProject = null; clearInterval(window.autoSyncInterval); renderHome(); switchTab('page-home'); }
+
+    async function renderHome() {
+        const container = document.getElementById('projectListContainer');
+        container.innerHTML = '<div style="text-align:center; padding:20px; color:#aaa;">🔄 讀取雲端資料庫中...</div>';
+        if (GAS_URL.includes("請在這裡貼上")) { container.innerHTML = `<div style="color:#ffb74d; padding:15px; border:2px solid #ffb74d; border-radius:8px; margin-bottom:10px; background:#2a2a2a;"><b>⚠️ 系統設定錯誤</b><br>您尚未在下方貼上 GAS_URL 網址！<br>已強制切換為本地模式。</div>`; return renderLocalHomeFallback(); }
+
+        try {
+            const resp = await fetch(GAS_URL + "?t=" + new Date().getTime(), { method: 'POST', headers: fetchHeaders, body: JSON.stringify({action: 'getList'}), redirect: 'follow' });
+            const text = await resp.text(); 
+            try {
+                const data = JSON.parse(text);
+                if (data.error) { container.innerHTML = `<div style="color:#ff5252; padding:15px; border:2px solid #ff5252; border-radius:8px; margin-bottom:10px; background:#2a2a2a; word-break:break-all;"><b>🚨 GAS 後端報錯：</b><br>${data.error}</div>`; return renderLocalHomeFallback(); }
+                if (!Array.isArray(data)) throw new Error("回傳的不是專案陣列");
+                if(data.length === 0) { container.innerHTML = '<p style="text-align:center; color:#888;">雲端尚無專案，請建立新專案</p>'; return; }
+                
+                container.innerHTML = '';
+                data.forEach(key => {
+                    const safeKey = key.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+                    container.innerHTML += `
+                    <div class="list-item" style="display:flex; flex-direction:column; align-items:center;">
+                        <div class="list-title" style="font-size:1.2rem; width:100%; text-align:center; margin-bottom:10px;">${key}</div>
+                        <button class="btn-main" style="background:#1565c0; width:100%; margin:0; flex-shrink:0;" onclick="openProject('${safeKey}', this)">📂 下載並開啟專案</button>
+                    </div>`;
+                });
+            } catch (jsonErr) {
+                container.innerHTML = `<div style="color:#ffb74d; padding:15px; border:2px solid #ffb74d; border-radius:8px; margin-bottom:10px; background:#2a2a2a; word-break:break-all;"><b>⚠️ 資料格式異常 (可能權限不符)</b><br>請確認GAS「誰可以存取」是否為「所有人」。<br>收到的異常內容：<br>${text.substring(0, 80)}...</div>`;
+                renderLocalHomeFallback();
+            }
+        } catch(e) { 
+            container.innerHTML = `<div style="color:#ff5252; padding:15px; border:2px solid #ff5252; border-radius:8px; margin-bottom:10px; background:#2a2a2a;"><b>🚨 網路連線失敗</b><br>被瀏覽器阻擋或網址無效。<br>錯誤代碼：${e.message}</div>`;
+            renderLocalHomeFallback(); 
+        }
+    }
+
+    function renderLocalHomeFallback() {
+        const container = document.getElementById('projectListContainer');
+        const keys = Object.keys(db).reverse();
+        if(keys.length === 0) container.innerHTML += '<p style="text-align:center;">本地也無暫存專案</p>';
+        keys.forEach(key => { 
+            const safeKey = key.replace(/'/g, "\\'").replace(/"/g, "&quot;");
+            container.innerHTML += `
+            <div class="list-item" style="display:flex; flex-direction:column; align-items:center;">
+                <div class="list-title" style="font-size:1.2rem; width:100%; text-align:center; margin-bottom:10px;">${key} (本地)</div>
+                <button class="btn-main" style="background:#555; width:100%; margin:0; flex-shrink:0;" onclick="openProject('${safeKey}', this)">📂 開啟本地暫存</button>
+            </div>`; 
+        });
     }
 
     function saveBriefingToLocal() {
         const data = {};
-        ['b_iso','b_ic','b_usage','b_structure','b_arriveTime','c_time','b_floorUp','b_floorDown','c_trappedState','c_deployCount','c_rescued','c_toRescue','c_trapLocation','c_notes','s_time','e_weather','e_wind','s_advice'].forEach(id => { if(document.getElementById(id)) data[id] = document.getElementById(id).value; });
-        data['b_area_input'] = document.getElementById('b_area_input').value; data['b_area'] = document.getElementById('b_area').value;
-        for(let i=0; i<4; i++) { ['floor','teams','fire','smoke','door','window','risk','time','photo_url','photo_id'].forEach(f => { data[`r_${i}_${f}`] = document.getElementById(`r_${i}_${f}`).value; }); }
-        db[currentProject].briefing = data; localStorage.setItem('isoDB', JSON.stringify(db));
+        const ids = ['b_iso', 'b_ic', 'b_usage', 'b_usage_other', 'b_structure', 'b_structure_other', 'b_arriveTime', 'b_floorUp', 'b_floorDown', 'c_time', 'c_trappedState', 'c_deployCount', 'c_rescued', 'c_toRescue', 'c_trapLocation', 'c_notes', 's_time', 's_advice', 'e_weather', 'e_wind'];
+        ids.forEach(id => data[id] = document.getElementById(id).value);
+        data['b_area_input'] = document.getElementById('b_area_input').value; data['b_area_unit'] = document.getElementById('b_area_unit').value; data['b_area'] = document.getElementById('b_area').value; 
+        data['b_usage_final'] = (!data['b_usage']) ? '' : ((data['b_usage'] === '其他') ? data['b_usage_other'] : data['b_usage']);
+        data['b_structure_final'] = (!data['b_structure']) ? '' : ((data['b_structure'] === '其他') ? data['b_structure_other'] : data['b_structure']);
+        for(let i=0; i<4; i++) { ['floor', 'teams', 'fire', 'smoke', 'door', 'window', 'risk', 'time', 'photo_url', 'photo_id', 'photo_formula'].forEach(f => { data[`r_${i}_${f}`] = document.getElementById(`r_${i}_${f}`).value; }); }
+        if(!db[currentProject]) db[currentProject] = { briefing: {}, medic: [] };
+        db[currentProject].briefing = data; saveDB();
     }
 
-    function switchTab(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id==='page-medic') renderMedicList(); window.scrollTo(0,0); }
-    function goHome() { currentProject = null; clearInterval(window.autoSyncInterval); renderHome(); switchTab('page-home'); }
-    function saveLocal() { localStorage.setItem('isoDB', JSON.stringify(db)); }
-    
-    async function createNewProject() {
-        const n = document.getElementById('newProjectName').value.trim(); const c = document.getElementById('newProjectCreator').value.trim();
-        if(!n || !c) return alert("請填寫資料"); currentModifier = c; db[n] = { creator: c, briefing: {}, medic: [] }; saveLocal();
-        await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'createProject', projectName: n, creator: c, modifier: c }) });
-        openProject(n, null, true); 
+    function addMedicEntry() {
+        if(!currentProject) return showToast("⚠️ 請先開啟專案", "error");
+        let tInput = document.getElementById('m_time').value; let mInput = document.getElementById('m_m').value.trim();
+        if (!tInput) return showToast("⚠️ 「時間」為必填欄位！", "error"); if (!mInput) return showToast("⚠️ 「監控環境與行動 (M)」為必填欄位！", "error");
+        db[currentProject].medic.push({ id: Date.now(), time: tInput, m: mInput, e: document.getElementById('m_e').value, d: document.getElementById('m_d').value, i: document.getElementById('m_i').value, c: document.getElementById('m_c').value, completed: false, deleted: false });
+        saveDB(); ['m_time', 'm_m', 'm_e', 'm_d', 'm_i', 'm_c'].forEach(id => document.getElementById(id).value = ''); renderMedicList(); showToast("✅ MEDIC 事件已加入清單", "success");
     }
-    async function renderHome() {
-        const c = document.getElementById('projectListContainer'); const resp = await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({action: 'getList'}) });
-        const list = await resp.json(); c.innerHTML = '';
-        list.forEach(k => { c.innerHTML += `<div class="list-item"><div class="list-title" style="text-align:center;">${k}</div><button class="btn-main" style="background:#1565c0; margin:0;" onclick="openProject('${k}', this)">📂 下載開啟</button></div>`; });
+
+    function deleteMedicEntry(index) { db[currentProject].medic[index].deleted = true; saveDB(); renderMedicList(); showToast("🗑️ 紀錄已隱藏，下次同步將寫入雲端", "warning"); }
+    function closeMedicEntry(index) { db[currentProject].medic[index].completed = true; saveDB(); renderMedicList(); }
+
+    function renderMedicList() {
+        if(!currentProject || !db[currentProject]) return;
+        const container = document.getElementById('medicListContainer'); container.innerHTML = '';
+        const list = db[currentProject].medic || []; let visibleCount = 0;
+        let sortedList = list.map((item, index) => { return { data: item, originalIndex: index }; }).sort((a, b) => { if (a.data.completed === b.data.completed) return a.originalIndex - b.originalIndex; return a.data.completed ? 1 : -1; });
+
+        sortedList.forEach((mappedItem) => {
+            const item = mappedItem.data; const index = mappedItem.originalIndex;
+            if (item.deleted) return; visibleCount++;
+            const isLocked = item.completed; const disabledAttr = isLocked ? 'disabled' : ''; const displayBg = isLocked ? '#1a3b1a' : '#252525';
+            
+            const delBtn = isLocked ? '' : `<button class="btn-delete" style="display:inline-flex; align-items:center; justify-content:center; height:36px; padding:0 12px; border-radius:4px; font-size:14px; margin:0; line-height:1;" onclick="confirmAction(this, deleteMedicEntry, ${index})">🗑️ 刪除</button>`;
+            const closeBtn = isLocked ? `<span style="color:#4caf50; font-weight:bold; display:inline-flex; align-items:center; height:36px;">🔒 已結案</span>` : `<button class="btn-delete" style="background:#ff9800; display:inline-flex; align-items:center; justify-content:center; height:36px; padding:0 12px; border-radius:4px; font-size:14px; margin:0; line-height:1;" onclick="confirmAction(this, closeMedicEntry, ${index})">✅ 結案</button>`;
+            const syncBtn = isLocked ? '' : `<button class="nav-btn" style="display:inline-flex; align-items:center; justify-content:center; width:auto; padding:0 16px; height:36px; min-height:36px; max-height:36px; margin:0; background:#2196F3; font-size:14px; font-weight:bold; border:none; border-radius:4px; color:white; line-height:1;" onclick="confirmAction(this, syncSingleMedicToCloud, ${index})">☁️ 同步</button>`;
+
+            container.innerHTML += `
+            <div class="medic-entry" style="background:${displayBg};">
+                <div class="row-full" style="border-bottom: 1px solid #444; padding-bottom: 12px; margin-bottom: 12px;">
+                    <label style="margin-top:0; color:#fff;">評估時間:</label>
+                    <input type="time" id="med_t_${index}" value="${item.time}" ${disabledAttr} style="background:#333; margin-bottom: 10px;">
+                    <div style="display:flex; gap:8px; justify-content:flex-end; width:100%;">${syncBtn} ${delBtn} ${closeBtn}</div>
+                </div>
+                <div class="medic-body">
+                    <div><span style="color:#aaa;">[M]</span> <input type="text" value="${item.m}" disabled style="background:#1a1a1a; color:#888;"></div>
+                    <div><span style="color:#aaa;">[E]</span> <textarea id="med_e_${index}" ${disabledAttr} onchange="updateMedic(${index})">${item.e}</textarea></div>
+                    <div><span style="color:#aaa;">[D]</span> <textarea id="med_d_${index}" ${disabledAttr} onchange="updateMedic(${index})">${item.d}</textarea></div>
+                    <div><span style="color:#aaa;">[I]</span> <textarea id="med_i_${index}" ${disabledAttr} onchange="updateMedic(${index})">${item.i}</textarea></div>
+                    <div><span style="color:#aaa;">[C]</span> <textarea id="med_c_${index}" ${disabledAttr} onchange="updateMedic(${index})">${item.c}</textarea></div>
+                </div>
+            </div>`;
+        });
+        if(visibleCount === 0) container.innerHTML = '<p style="color:#888;">尚無 MEDIC 紀錄</p>';
     }
+
+    function updateMedic(index) {
+        if(db[currentProject].medic[index].completed) return;
+        ['time','e','d','i','c'].forEach(f => { const el = document.getElementById(`med_${f.charAt(0)}_${index}`); if(el) db[currentProject].medic[index][f] = el.value; });
+        saveDB();
+    }
+
     initSelects(); renderHome();
 </script>
 </body>
