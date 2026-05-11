@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>新竹縣消防局ISO作業平台</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root { --primary: #d32f2f; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #ffb74d; --medic: #4caf50; }
+        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; padding-bottom: 100px; }
+        h1, h2, h3 { color: var(--accent); margin-top: 0; }
+        h1 { font-size: 1.4rem; text-align: center; border-bottom: 2px solid #333; padding-bottom: 10px; }
+        h2 { font-size: 1.2rem; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        
+        .page { display: none; animation: fadeIn 0.3s; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .card { background: var(--card); border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid var(--primary); }
+        .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+        .grid-2 > div { display: flex; flex-direction: column; width: 100%; min-width: 0; }
+        .row-full { display: flex; flex-direction: column; width: 100%; margin-bottom: 12px; }
+        label { display: block; font-size: 0.85rem; color: #aaa; margin-top: 10px; margin-bottom: 4px; white-space: nowrap; }
+        
+        input, select, .nav-btn { 
+            width: 100%; max-width: 100%; min-width: 0; padding: 0 10px; border-radius: 6px; border: 1px solid #444; 
+            background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; 
+            height: 48px; min-height: 48px; transition: 0.3s;
+        }
+        input[type="time"]::-webkit-date-and-time-value { text-align: left; }
+        textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #444; background: #2a2a2a; color: white; box-sizing: border-box; font-size: 16px; min-height: 80px; }
+
+        .btn-main { width: 100%; background: #444; color: white; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 10px; height: 55px; display: flex; align-items: center; justify-content: center; flex-shrink:0;}
+        
+        /* 羅盤風向儀樣式 */
+        .wind-compass { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 280px; margin: 10px auto; }
+        .wind-btn { 
+            aspect-ratio: 1/1; height: auto; padding: 0; font-size: 16px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center; background: #333; border: 1px solid #555; border-radius: 8px; color: #ddd; cursor: pointer; transition: 0.2s;
+        }
+        .wind-btn.active { background: var(--accent); color: #000; border-color: #fff; box-shadow: 0 0 10px rgba(255, 183, 77, 0.8); }
+
+        .btn-delete { background: #b71c1c; color: white; border-radius: 4px; padding: 0 12px; font-size: 13px; font-weight: bold; width: auto; height: 36px; display: inline-flex; align-items: center; justify-content: center; border: none;}
+        .medic-entry { background: #252525; padding: 15px; border-radius: 6px; margin-top: 10px; border-left: 4px solid #4caf50; }
+        
+        .list-item { background: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #444; }
+        .list-title { font-size: 1.1rem; font-weight: bold; color: white; margin-bottom: 10px; text-align:center;}
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); display: flex; border-top: 1px solid #333; z-index: 100000; padding-bottom: env(safe-area-inset-bottom); }
+        .bottom-nav button { flex: 1; padding: 16px 0; background: transparent; border: none; color: #777; font-size: 0.95rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .bottom-nav button.active { color: var(--primary); border-top: 3px solid var(--primary); }
+
+        .back-to-top { position: fixed; bottom: 90px; right: 20px; background-color: #555; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.6); cursor: pointer; z-index: 90000; display: none; align-items: center; justify-content: center; opacity: 0.85; }
+
+        #sysToast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 30px; font-size: 15px; font-weight: bold; z-index: 999999; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: center; white-space: nowrap; }
+
+        #exportTemplate { position: absolute; left: -9999px; top: -9999px; width: 1000px; background: #ffffff; color: #000000; padding: 30px; box-sizing: border-box; font-family: "微軟正黑體", sans-serif; }
+        .export-title { text-align: center; font-size: 32px; font-weight: 900; margin-bottom: 20px; border-bottom: 4px solid #d32f2f; padding-bottom: 10px; color:#d32f2f;}
+        .export-section { margin-bottom: 15px; border: 2px solid #000; border-radius: 8px; overflow: hidden; }
+        .export-table { width: 100%; border-collapse: collapse; text-align: center; table-layout: fixed;}
+        .export-table th { background: #e0e0e0; padding: 10px 4px; border: 1px solid #444; font-weight: bold; font-size: 15px; color: #000;}
+        .export-table td { padding: 10px 4px; border: 1px solid #444; font-weight: bold; font-size: 15px; color: #000; vertical-align: middle;}
+    </style>
+</head>
+<body>
+
+<div id="sysToast">✅ 系統提示</div>
+<div id="autoSyncIndicator" style="position:fixed; top:20px; right:20px; background:#4caf50; color:white; padding:8px 15px; border-radius:20px; font-size:14px; font-weight:bold; display:none; z-index:99999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">🔄 雲端自動同步成功</div>
+<button id="backToTopBtn" class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">⬆️</button>
+
+<div id="page-home" class="page active">
+    <h1>新竹縣消防局ISO作業平台</h1>
+    <div class="card">
+        <h2>建立新專案</h2>
+        <div class="grid-2">
+            <div><label>案名</label><input type="text" id="newProjectName" placeholder="案名..."></div>
+            <div><label>ISO姓名</label><input type="text" id="newProjectCreator" placeholder="姓名..."></div>
+        </div>
+        <button id="btnCreateProject" class="btn-main" style="background:var(--primary);" onclick="confirmAction(this, createNewProject)">建立新專案</button>
+    </div>
+    <div class="card">
+        <h2 style="color:var(--accent);">雲端救災專案 (置頂最新)</h2>
+        <input type="text" id="modifierName" placeholder="載入前請輸入姓名 (操作人員)..." style="margin-bottom:10px; border: 2px solid #ff5252;">
+        <button class="btn-main" style="background:#555; height:48px;" onclick="renderHome()">↻ 重新整理</button>
+        <div id="projectListContainer" style="text-align: center; padding: 10px; color:#aaa;">讀取中...</div>
+    </div>
+</div>
+
+<div id="page-briefing" class="page">
+    <div class="card">
+        <h2>簡報表 (Briefing List)</h2>
+        <div class="row-full"><label>災害名稱</label><input type="text" id="b_caseName" readonly style="color:var(--accent); font-weight:bold;"></div>
+        <div class="grid-2">
+            <div><label>事故安全官</label><input type="text" id="b_iso"></div>
+            <div><label>初期指揮官</label><input type="text" id="b_ic"></div>
+        </div>
+        <div class="grid-2">
+            <div><label>用途</label><select id="b_usage" onchange="toggleUsageOther()"><option value="" disabled selected>選擇...</option><option value="住宅">住宅</option><option value="工廠">工廠</option><option value="鐵皮">鐵皮</option><option value="其他">其他</option></select></div>
+            <div><label>構造</label><select id="b_structure" onchange="toggleStructureOther()"><option value="" disabled selected>選擇...</option><option value="RC">RC</option><option value="鐵皮">鐵皮</option><option value="其他">其他</option></select></div>
+        </div>
+        <input type="text" id="b_usage_other" style="display:none; margin-top:5px;" placeholder="輸入用途">
+        <input type="text" id="b_structure_other" style="display:none; margin-top:5px;" placeholder="輸入構造">
+        <label>單一樓層面積 (換算)</label>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <input type="number" id="b_area_input" placeholder="數字..." style="flex:2;" onblur="convertArea()">
+            <select id="b_area_unit" style="flex:1;" onchange="convertArea()"><option value="m2">㎡</option><option value="ping">坪</option></select>
+            <input type="hidden" id="b_area"> 
+        </div>
+        <div class="row-full"><label>抵達時間</label><input type="time" id="b_arriveTime"></div>
+        <div class="row-full"><label>指揮官確認時間</label><input type="time" id="c_time"></div>
+        <div class="grid-2">
+            <div><label>地上層</label><select id="b_floorUp" class="floor-select"></select></div>
+            <div><label>地下層</label><select id="b_floorDown" class="floor-select"></select></div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>確認事項</h2>
+        <div class="grid-2">
+            <div><label>受困</label><select id="c_trappedState"><option value="無">無</option><option value="有">有</option></select></div>
+            <div><label>作業組數</label><select id="c_deployCount" class="num-select"></select></div>
+        </div>
+        <div class="grid-2">
+            <div><label>救出人數</label><select id="c_rescued" class="num-select"></select></div>
+            <div><label>待救人數</label><select id="c_toRescue" class="num-select"></select></div>
+        </div>
+        <div class="row-full"><label>待救位置</label><input type="text" id="c_trapLocation" placeholder="無受困則免填"></div>
+        <label>備註</label><textarea id="c_notes" rows="2"></textarea>
+    </div>
+
+    <div class="card">
+        <h2>初期 360° RECON</h2>
+        <div id="reconContainer"></div>
+    </div>
+
+    <div class="card">
+        <h2>天氣與風向羅盤</h2>
+        <label>天氣狀況</label>
+        <select id="e_weather">
+            <option value="" disabled selected>請選擇...</option>
+            <option value="☀️ 晴天">☀️ 晴天</option><option value="⛅ 多雲">⛅ 多雲</option><option value="☁️ 陰天">☁️ 陰天</option>
+            <option value="🌦️ 小雨">🌦️ 小雨</option><option value="🌧️ 大雨">🌧️ 大雨</option><option value="⛈️ 雷雨">⛈️ 雷雨</option>
+        </select>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
+            <label style="margin:0;">現場風向 (點選羅盤方位)</label>
+            <button class="btn-main" style="width:auto; height:32px; min-height:32px; padding:0 12px; margin:0; background:#ff9800; font-size:13px; color:#000;" onclick="getDeviceCompass()">🧭 手機指向抓取</button>
+        </div>
+        <div class="wind-compass" id="windCompass">
+            <button class="wind-btn" onclick="setWind('西北風', this)">NW</button>
+            <button class="wind-btn" onclick="setWind('北風', this)">N</button>
+            <button class="wind-btn" onclick="setWind('東北風', this)">NE</button>
+            <button class="wind-btn" onclick="setWind('西風', this)">W</button>
+            <button class="wind-btn" onclick="setWind('無風', this)">無</button>
+            <button class="wind-btn" onclick="setWind('東風', this)">E</button>
+            <button class="wind-btn" onclick="setWind('西南風', this)">SW</button>
+            <button class="wind-btn" onclick="setWind('南風', this)">S</button>
+            <button class="wind-btn" onclick="setWind('東南風', this)">SE</button>
+        </div>
+        <input type="hidden" id="e_wind" value="無風">
+        
+        <label>安全建議</label><textarea id="s_advice" rows="3"></textarea>
+        <div class="row-full"><label>安全簡報時間</label><input type="time" id="s_time"></div>
+    </div>
+
+    <button class="btn-main btn-sync-brief" onclick="syncBriefingToCloud()" style="background:var(--medic);">☁️ 儲存並同步簡報表</button>
+    <button id="btnExportImage" class="btn-main btn-export" onclick="exportToImage()">📸 匯出簡報圖檔</button>
+</div>
+
+<div id="page-medic" class="page">
+    <div class="card" style="border-left-color: var(--medic);">
+        <h2 style="color:var(--medic);">新增 MEDIC 紀錄</h2>
+        <div class="row-full"><label>時間 *</label><input type="time" id="m_time"></div>
+        <label>監控環境(M) *必填(鎖定)</label><textarea id="m_m" placeholder="偵測地點或行動..."></textarea>
+        <label>危險與措施(E/D/I/C)</label><textarea id="m_e"></textarea>
+        <button class="btn-main" onclick="confirmAction(this, addMedicEntry)" style="background:#2196F3;">➕ 加入本地列表</button>
+    </div>
+    <div id="medicListContainer"></div>
+    <button class="btn-main btn-sync-medic" onclick="syncMedicToCloud()" style="background:var(--medic);">☁️ 儲存同步全部 MEDIC 表</button>
+</div>
+
+<nav class="bottom-nav" id="bottomNav">
+    <button onclick="goHome()">🏠 首頁</button>
+    <button id="nav-briefing" onclick="switchTab('page-briefing')">📋 簡報表</button>
+    <button id="nav-medic" onclick="switchTab('page-medic')">✚ MEDIC</button>
+</nav>
+
+<div id="exportTemplate">
+    <div class="export-title">新竹縣消防局 ISO現場簡報表</div>
+    <div class="export-section">
+        <div class="export-grid" style="display:grid; grid-template-columns: 1fr 1fr; border-bottom:1px solid #000;">
+            <div style="border-right:1px solid #000; padding:8px;"><b>案名：</b><span id="exp_caseName"></span></div>
+            <div style="padding:8px;"><b>ISO/IC：</b><span id="exp_iso_ic"></span></div>
+        </div>
+        <div class="export-grid" style="display:grid; grid-template-columns: 1fr 1fr;">
+            <div style="border-right:1px solid #000; padding:8px;"><b>受困：</b><span id="exp_trapped"></span></div>
+            <div style="padding:8px;"><b>待救位置：</b><span id="exp_trapLoc"></span></div>
+        </div>
+    </div>
+    <div class="export-section"><table class="export-table" id="exp_reconTable"></table></div>
+    <div style="text-align: right; color: #444; font-size: 13px; font-weight:bold; margin-top:10px;" id="exp_footer"></div>
+</div>
+
+<script>
+    const GAS_URL = "請填寫您的GAS網址"; 
+    const fetchHeaders = { 'Content-Type': 'text/plain;charset=utf-8' };
+    let currentProject = null; let currentModifier = ""; let db = JSON.parse(localStorage.getItem('isoDB')) || {};
+    window.lastBHash = ""; window.lastMHash = ""; window.autoSyncInterval = null;
+
+    function showToast(msg, type = "success") {
+        const t = document.getElementById('sysToast'); t.style.background = type === "error" ? "#d32f2f" : (type === "warning" ? "#ff9800" : "#4caf50");
+        t.innerHTML = msg; t.style.display = "block"; setTimeout(() => { t.style.display = "none"; }, 3000);
+    }
+
+    function confirmAction(btn, cb, arg) {
+        if (btn.dataset.confirm === "yes") { btn.dataset.confirm = ""; btn.innerText = btn.dataset.ot; btn.style.background = btn.dataset.ob; cb(arg); return; } 
+        btn.dataset.ot = btn.innerText; btn.dataset.ob = btn.style.background; btn.dataset.confirm = "yes"; btn.style.background = "#d32f2f"; btn.innerText = "⚠️ 確定？";
+        setTimeout(() => { if (btn.dataset.confirm === "yes") { btn.dataset.confirm = ""; btn.innerText = btn.dataset.ot; btn.style.background = btn.dataset.ob; } }, 3000);
+    }
+
+    function setWind(val, el) {
+        document.getElementById('e_wind').value = val;
+        document.querySelectorAll('.wind-btn').forEach(b => b.classList.remove('active'));
+        if(el) el.classList.add('active');
+        showToast(`已選定風向: ${val}`);
+    }
+
+    function getDeviceCompass() {
+        showToast("🧭 請將手機頂部對準風吹來的方向...", "warning");
+        const handleOrientation = function(event) {
+            let heading = null;
+            if (event.webkitCompassHeading) { heading = event.webkitCompassHeading; } 
+            else if (event.alpha !== null) { heading = 360 - event.alpha; }
+
+            if (heading !== null) {
+                let val = "無風";
+                if (heading >= 337.5 || heading < 22.5) val = "北風";
+                else if (heading >= 22.5 && heading < 67.5) val = "東北風";
+                else if (heading >= 67.5 && heading < 112.5) val = "東風";
+                else if (heading >= 112.5 && heading < 157.5) val = "東南風";
+                else if (heading >= 157.5 && heading < 202.5) val = "南風";
+                else if (heading >= 202.5 && heading < 247.5) val = "西南風";
+                else if (heading >= 247.5 && heading < 292.5) val = "西風";
+                else if (heading >= 292.5 && heading < 337.5) val = "西北風";
+
+                document.getElementById('e_wind').value = val;
+                document.querySelectorAll('.wind-btn').forEach(b => {
+                    b.classList.remove('active');
+                    let t = b.innerText;
+                    if ((val==="西北風"&&t==="NW")||(val==="北風"&&t==="N")||(val==="東北風"&&t==="NE")||(val==="西風"&&t==="W")||(val==="東風"&&t==="E")||(val==="西南風"&&t==="SW")||(val==="南風"&&t==="S")||(val==="東南風"&&t==="SE")) { b.classList.add('active'); }
+                });
+                showToast(`✅ 羅盤抓取成功: ${val}`, "success");
+                window.removeEventListener('deviceorientationabsolute', handleOrientation);
+                window.removeEventListener('deviceorientation', handleOrientation);
+            }
+        };
+
+        if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+            DeviceOrientationEvent.requestPermission().then(state => {
+                if (state === 'granted') { window.addEventListener('deviceorientation', handleOrientation); } 
+                else { showToast("❌ 羅盤權限被拒絕", "error"); }
+            }).catch(() => showToast("❌ 無法呼叫電子羅盤", "error"));
+        } else {
+            window.addEventListener('deviceorientationabsolute', handleOrientation);
+            window.addEventListener('deviceorientation', handleOrientation);
+            setTimeout(() => { 
+                window.removeEventListener('deviceorientationabsolute', handleOrientation); window.removeEventListener('deviceorientation', handleOrientation);
+            }, 3000); 
+        }
+    }
+
+    function convertArea() {
+        let input = document.getElementById('b_area_input'); let unit = document.getElementById('b_area_unit'); let hidden = document.getElementById('b_area');
+        let val = parseFloat(input.value); if (isNaN(val)) { hidden.value = ""; return; }
+        if (unit.value === 'ping') {
+            let m2 = (val * 3.305785).toFixed(2); input.value = m2; unit.value = 'm2'; hidden.value = m2; showToast("✅ 已自動單位換算", "success");
+        } else { hidden.value = val; }
+    }
+
+    function initSelects() {
+        let f = ''; for(let i=0; i<=50; i++) f += `<option value="${i}">${i}</option>`;
+        document.querySelectorAll('.floor-select, .num-select').forEach(el => el.innerHTML = f);
+        const faces = ["第一面", "第二面", "第三面", "第四面"]; let rHtml = '';
+        faces.forEach((face, idx) => {
+            rHtml += `
+            <div style="background:#252525; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #444;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <h3 style="margin:0; color:#ff5252;">${face}</h3>
+                    <label class="photo-upload-btn" onclick="document.getElementById('file_${idx}').click()">📸 拍照</label>
+                    <input type="file" id="file_${idx}" accept="image/*" capture="environment" style="display:none;" onchange="uploadReconPhoto(${idx}, this)">
+                </div>
+                <input type="hidden" id="r_${idx}_photo_url"><input type="hidden" id="r_${idx}_photo_id">
+                <div id="r_${idx}_photo_status" style="font-size:12px; text-align:right; margin-bottom:10px;"></div>
+                <div class="grid-2"><div><label>樓層</label><select id="r_${idx}_floor" class="floor-select"></select></div><div><label>組數</label><select id="r_${idx}_teams" class="num-select"></select></div></div>
+                <div class="grid-2"><div><label>火勢</label><select id="r_${idx}_fire"><option value="0無">0</option><option value="1火光">1</option><option value="2火舌">2</option><option value="3延燒">3</option></select></div><div><label>煙霧</label><select id="r_${idx}_smoke"><option value="0無">0</option><option value="1小">1</option><option value="2大">2</option></select></div></div>
+                <div class="grid-2"><div><label>門</label><select id="r_${idx}_door"><option value="無">無</option><option value="有">有</option></select></div><div><label>窗</label><select id="r_${idx}_window"><option value="無">無</option><option value="有">有</option></select></div></div>
+                <div class="row-full"><label>風險</label><input type="text" id="r_${idx}_risk" placeholder="無風險則免填"></div>
+                <div class="row-full"><label>完成時間</label><input type="time" id="r_${idx}_time"></div>
+            </div>`;
+        });
+        document.getElementById('reconContainer').innerHTML = rHtml;
+    }
+
+    function uploadReconPhoto(idx, el) {
+        const file = el.files[0]; if (!file) return;
+        document.getElementById(`r_${idx}_photo_status`).innerText = "⏳ 處理中...";
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas'); const MAX_W = 600; let w = img.width, h = img.height;
+                if (w > MAX_W) { h = h * (MAX_W / w); w = MAX_W; }
+                canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                const b64 = canvas.toDataURL('image/jpeg', 0.6).split(',')[1];
+                fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'uploadPhoto', projectName: currentProject, filename: `R_${idx}.jpg`, mimeType: 'image/jpeg', base64: b64 }) })
+                .then(r=>r.json()).then(res => {
+                    document.getElementById(`r_${idx}_photo_url`).value = res.url;
+                    document.getElementById(`r_${idx}_photo_status`).innerHTML = `<a href="${res.url}" target="_blank" style="color:#4caf50; font-weight:bold;">🔗 查看照片</a>`;
+                    saveBriefingToLocal(); showToast(`✅ 上傳成功`);
+                });
+            }; img.src = e.target.result;
+        }; reader.readAsDataURL(file);
+    }
+
+    async function openProject(name, btn, isNew = false) {
+        if (!isNew) { currentModifier = document.getElementById('modifierName').value.trim(); if (!currentModifier) { showToast("⚠️ 請輸入姓名", "error"); return; } }
+        currentProject = name; document.getElementById('b_caseName').value = name; document.getElementById('bottomNav').style.display = 'flex';
+        const resp = await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'getProjectData', projectName: name }) });
+        const data = await resp.json(); db[name] = data; localStorage.setItem('isoDB', JSON.stringify(db));
+        
+        Object.keys(data.briefing).forEach(k => { if(document.getElementById(k)) document.getElementById(k).value = data.briefing[k]; });
+        if(data.briefing['b_area']) document.getElementById('b_area_input').value = data.briefing['b_area'];
+        
+        let windVal = data.briefing['e_wind'] || "無風";
+        document.getElementById('e_wind').value = windVal;
+        document.querySelectorAll('.wind-btn').forEach(b => { 
+            b.classList.remove('active');
+            let t = b.innerText;
+            if (windVal===t || (windVal==="西北風"&&t==="NW")||(windVal==="北風"&&t==="N")||(windVal==="東北風"&&t==="NE")||(windVal==="西風"&&t==="W")||(windVal==="東風"&&t==="E")||(windVal==="西南風"&&t==="SW")||(windVal==="南風"&&t==="S")||(windVal==="東南風"&&t==="SE")||(windVal==="無風"&&t==="無")) {
+                b.classList.add('active');
+            }
+        });
+
+        for(let i=0; i<4; i++) { if (db[name].briefing[`r_${i}_photo_url`]) document.getElementById(`r_${i}_photo_status`).innerHTML=`<a href="${db[name].briefing[`r_${i}_photo_url`]}" target="_blank" style="color:#4caf50; font-weight:bold;">🔗 載入歷史影像</a>`; }
+        window.lastBHash = JSON.stringify(db[currentProject].briefing); window.lastMHash = JSON.stringify(db[currentProject].medic);
+        startAutoSync(); switchTab('page-briefing'); showToast("✅ 專案載入成功");
+    }
+
+    function startAutoSync() {
+        if(window.autoSyncInterval) clearInterval(window.autoSyncInterval);
+        window.autoSyncInterval = setInterval(() => {
+            if (!currentProject || !currentModifier) return;
+            saveBriefingToLocal(); const curB = JSON.stringify(db[currentProject].briefing); const curM = JSON.stringify(db[currentProject].medic || []);
+            if (curB === window.lastBHash && curM === window.lastMHash) return;
+            window.lastBHash = curB; window.lastMHash = curM;
+            fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'saveBriefing', projectName: currentProject, modifier: currentModifier + "(自)", briefing: db[currentProject].briefing, overwrite: false }) });
+            fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'saveMedic', projectName: currentProject, modifier: currentModifier + "(自)", medic: db[currentProject].medic, overwrite: false }) }).then(() => { document.getElementById('autoSyncIndicator').style.display='block'; setTimeout(()=>document.getElementById('autoSyncIndicator').style.display='none', 3000); });
+        }, 15000);
+    }
+
+    async function syncBriefingToCloud() {
+        saveBriefingToLocal();
+        await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'saveBriefing', projectName: currentProject, modifier: currentModifier, briefing: db[currentProject].briefing, overwrite: false }) });
+        window.lastBHash = JSON.stringify(db[currentProject].briefing); showToast("✅ 同步置頂成功");
+    }
+
+    async function syncMedicToCloud() {
+        await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'saveMedic', projectName: currentProject, modifier: currentModifier, medic: db[currentProject].medic, overwrite: false }) });
+        window.lastMHash = JSON.stringify(db[currentProject].medic); showToast("✅ MEDIC 同步成功");
+    }
+
+    function addMedicEntry() {
+        let t = document.getElementById('m_time').value; let m = document.getElementById('m_m').value.trim();
+        if(!t || !m) return showToast("⚠️ 時間與(M)必填", "error");
+        db[currentProject].medic.push({ id: Date.now(), time: t, m: m, e: document.getElementById('m_e').value, completed: false, deleted: false });
+        document.getElementById('m_m').value = ''; document.getElementById('m_e').value = ''; 
+        localStorage.setItem('isoDB', JSON.stringify(db)); renderMedicList(); showToast("✅ 加入成功");
+    }
+
+    function renderMedicList() {
+        const container = document.getElementById('medicListContainer'); container.innerHTML = '';
+        db[currentProject].medic.forEach((m, idx) => {
+            if (m.deleted) return; const isL = m.completed; const dAttr = isL ? 'disabled' : '';
+            const delBtn = isL ? '' : `<button class="btn-delete" style="height:36px;" onclick="confirmAction(this, (i)=>{db[currentProject].medic[i].deleted=true;renderMedicList();}, ${idx})">🗑️ 刪除</button>`;
+            const closeBtn = isL ? `<span style="color:#4caf50;">🔒 已結案</span>` : `<button class="btn-delete" style="background:#ff9800; height:36px;" onclick="db[currentProject].medic[${idx}].completed=true;renderMedicList();">✅ 結案</button>`;
+            const syncBtn = isL ? '' : `<button class="nav-btn" style="width:auto; height:36px; padding:0 12px; background:#2196F3; font-size:14px; font-weight:bold; border:none; display:inline-flex; align-items:center;" onclick="confirmAction(this, i=>{syncSingleMedicToCloud(i);}, ${idx})">☁️ 同步</button>`;
+            container.innerHTML += `
+            <div class="medic-entry" style="background:${isL?'#1a3b1a':'#252525'};">
+                <div class="medic-header">
+                    <div style="display:flex; align-items:center; gap:8px;"><span style="font-weight:bold;">時間:</span><input type="time" value="${m.time}" disabled style="width:130px; height:36px; background:#333;"></div>
+                    <div style="display:flex; gap:8px;">${syncBtn} ${delBtn} ${closeBtn}</div>
+                </div>
+                <div class="medic-body">
+                    <div><b>[M]</b> <input type="text" value="${m.m}" disabled style="background:#1a1a1a; color:#888;"></div>
+                    <div><b>[E/D/I/C]</b> <textarea ${dAttr} onchange="db[currentProject].medic[${idx}].e=this.value;saveLocal();">${m.e}</textarea></div>
+                </div>
+            </div>`;
+        });
+    }
+
+    function exportToImage() {
+        const btn = document.getElementById('btnExportImage'); btn.innerText = "⏳ 處理中...";
+        const v = (id) => document.getElementById(id).value || '未填寫';
+        document.getElementById('exp_caseName').innerText = currentProject;
+        document.getElementById('exp_iso_ic').innerText = `ISO: ${v('b_iso')} / 指揮官: ${v('b_ic')}`;
+        
+        let trapSt = v('c_trappedState'); document.getElementById('exp_trapped').innerHTML = (trapSt === '有') ? `<span style="color:#d32f2f; font-weight:900;">⚠️ 有</span>` : trapSt;
+        let loc = v('c_trapLocation'); document.getElementById('exp_trapLoc').innerHTML = (loc !== '未填寫' && loc !== '') ? `<span style="color:#d32f2f; font-weight:900;">${loc}</span>` : '無';
+        
+        let rHtml = '<tr><th width="8%">面向</th><th width="8%">樓</th><th width="8%">組</th><th width="8%">火</th><th width="8%">煙</th><th width="8%">門</th><th width="8%">窗</th><th width="22%">風險</th><th width="12%">時間</th><th width="10%">照片</th></tr>';
+        ["第一面", "第二面", "第三面", "第四面"].forEach((face, i) => {
+            const hasP = document.getElementById(`r_${i}_photo_url`).value !== "";
+            rHtml += `<tr><td style="font-weight:bold;">${face}</td><td>${v('r_'+i+'_floor')}</td><td>${v('r_'+i+'_teams')}</td><td>${v('r_'+i+'_fire')}</td><td>${v('r_'+i+'_smoke')}</td><td>${v('r_'+i+'_door')}</td><td>${v('r_'+i+'_window')}</td><td>${v('r_'+i+'_risk')}</td><td>${v('r_'+i+'_time')}</td><td style="color:${hasP?'#2196F3':'#888'};">${hasP?'[雲端有]':'無'}</td></tr>`;
+        });
+        document.getElementById('exp_reconTable').innerHTML = rHtml;
+        document.getElementById('exp_footer').innerText = `匯出人員：${currentModifier} | ${new Date().toLocaleString()}`;
+
+        setTimeout(() => { html2canvas(document.getElementById('exportTemplate'), { scale: 2 }).then(canvas => {
+            const link = document.createElement('a'); link.download = `ISO_${currentProject}.png`;
+            link.href = canvas.toDataURL(); link.click(); btn.innerText = "📸 匯出簡報圖檔";
+        }); }, 500);
+    }
+
+    function saveBriefingToLocal() {
+        const data = {};
+        ['b_iso','b_ic','b_usage','b_structure','b_arriveTime','c_time','b_floorUp','b_floorDown','c_trappedState','c_deployCount','c_rescued','c_toRescue','c_trapLocation','c_notes','s_time','e_weather','e_wind','s_advice'].forEach(id => { if(document.getElementById(id)) data[id] = document.getElementById(id).value; });
+        data['b_area_input'] = document.getElementById('b_area_input').value; data['b_area'] = document.getElementById('b_area').value;
+        for(let i=0; i<4; i++) { ['floor','teams','fire','smoke','door','window','risk','time','photo_url','photo_id'].forEach(f => { data[`r_${i}_${f}`] = document.getElementById(`r_${i}_${f}`).value; }); }
+        db[currentProject].briefing = data; localStorage.setItem('isoDB', JSON.stringify(db));
+    }
+
+    function switchTab(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); if(id==='page-medic') renderMedicList(); window.scrollTo(0,0); }
+    function goHome() { currentProject = null; clearInterval(window.autoSyncInterval); renderHome(); switchTab('page-home'); }
+    function saveLocal() { localStorage.setItem('isoDB', JSON.stringify(db)); }
+    
+    async function createNewProject() {
+        const n = document.getElementById('newProjectName').value.trim(); const c = document.getElementById('newProjectCreator').value.trim();
+        if(!n || !c) return alert("請填寫資料"); currentModifier = c; db[n] = { creator: c, briefing: {}, medic: [] }; saveLocal();
+        await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({ action: 'createProject', projectName: n, creator: c, modifier: c }) });
+        openProject(n, null, true); 
+    }
+    async function renderHome() {
+        const c = document.getElementById('projectListContainer'); const resp = await fetch(GAS_URL + "?t=" + Date.now(), { method: 'POST', body: JSON.stringify({action: 'getList'}) });
+        const list = await resp.json(); c.innerHTML = '';
+        list.forEach(k => { c.innerHTML += `<div class="list-item"><div class="list-title" style="text-align:center;">${k}</div><button class="btn-main" style="background:#1565c0; margin:0;" onclick="openProject('${k}', this)">📂 下載開啟</button></div>`; });
+    }
+    initSelects(); renderHome();
+</script>
+</body>
+</html>
