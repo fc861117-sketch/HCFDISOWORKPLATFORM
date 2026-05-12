@@ -11,11 +11,13 @@
         :root { --primary: #d32f2f; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #ffb74d; --medic: #4caf50; }
         body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; padding-bottom: 100px; }
         
-        /* 網頁專屬背景浮水印 (不阻擋點擊，匯出圖檔不會有) */
+       /* 網頁專屬背景浮水印 (滿版排列小字體) */
         .page-watermark { 
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); 
-            font-size: 60px; font-weight: 900; color: rgba(255, 255, 255, 0.05); 
-            z-index: 9999; pointer-events: none; user-select: none; white-space: nowrap; letter-spacing: 5px; 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: 9999; pointer-events: none; user-select: none;
+            /* 利用 SVG 繪製浮水印並設定為重複背景 */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='150'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' transform='rotate(-30, 110, 75)' fill='rgba(255, 255, 255, 0.04)' font-size='18' font-weight='900' font-family='sans-serif'%3Epowered by 單柏洋%3C/text%3E%3C/svg%3E");
+            background-repeat: repeat;
         }
 
         h1, h2, h3 { color: var(--accent); margin-top: 0; }
@@ -103,7 +105,7 @@
 <body>
 {% include nav.html %}
     
-<div class="page-watermark">made by 單柏洋</div>
+<div class="page-watermark"></div>
 
 <div id="sysToast">✅ 系統提示</div>
 <div id="autoSyncIndicator" style="position:fixed; top:20px; right:20px; background:#4caf50; color:white; padding:8px 15px; border-radius:20px; font-size:14px; font-weight:bold; display:none; z-index:99999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">🔄 雲端同步完成</div>
