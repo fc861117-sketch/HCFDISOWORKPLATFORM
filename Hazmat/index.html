@@ -128,7 +128,9 @@
     <!-- 搜尋區 -->
     <div class="card" id="main-card">
         <input type="text" id="search-input" class="search-box" placeholder="輸入 UN、中文名稱或 CAS..." oninput="handleSearch()" inputmode="search">
-        
+
+    <div id="reference-section">
+            
         <!-- 分頁按鈕 -->
         <div class="ref-tabs">
             <button class="tab-btn active" onclick="switchTab('un-tab')">運輸分類</button>
@@ -192,7 +194,7 @@
                 </div>
             </div>
         </div>
-        
+     </div>
         <div id="search-results"></div>
     </div>
 
@@ -236,10 +238,18 @@
             const query = inputEl.value.trim().toLowerCase();
             resultsEl.innerHTML = '';
             
+            // 🌟 抓取剛剛新增的圖資區塊
+            const refSection = document.getElementById('reference-section');
+            
+            // 如果搜尋框是空的
             if (query.length < 1) { 
                 resultsEl.style.display = 'none'; 
+                refSection.style.display = 'block'; // 🌟 恢復顯示圖資
                 return; 
             }
+            
+            // 如果有打字，就隱藏圖資
+            refSection.style.display = 'none'; // 🌟 隱藏圖資，讓搜尋結果往上頂
             
             // 使用外部引入的 db 變數
             const matches = db.filter(item => 
@@ -263,7 +273,6 @@
                 resultsEl.innerHTML = `<div style="padding:12px; color:#aaa; text-align:center;">查無相符結果</div>`;
             }
         }
-
         // 顯示結果與 GHS 對照轉換
         function showDetail(item) {
             detailEl.style.display = 'block';
@@ -300,11 +309,14 @@
         }
 
         // 重置回到搜尋首頁
-        function resetSearch() {
+        ffunction resetSearch() {
             inputEl.value = '';
             detailEl.style.display = 'none';
             document.getElementById('main-card').style.display = 'block';
             resultsEl.style.display = 'none';
+            
+            // 🌟 按下「清除重置」時，也要確保圖資區塊顯示出來
+            document.getElementById('reference-section').style.display = 'block';
         }
     </script>
 </body>
