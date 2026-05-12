@@ -254,7 +254,7 @@
         // --- VTS Logic ---
         let vtsData = { v: 'high', t: 'suff', s: 'small' };
         
-        function setVTS(type, val, el) {
+function setVTS(type, val, el) {
             vtsData[type] = val;
             
             const parent = el.parentElement;
@@ -266,23 +266,30 @@
             let tactic = "";
             let color = "";
             let tagStyle = "";
+            let textColor = ""; // 🌟 1. 新增這個變數來控制標題顏色
 
             if (vtsData.t === 'limit' || (vtsData.v === 'low' && (vtsData.s === 'grow' || vtsData.s === 'total'))) {
                 tactic = "撤退 / 非干預 (Non-intervention)";
                 color = "var(--extreme)"; 
                 tagStyle = "background-color: #ffeb3b; color: #b71c1c;"; 
+                textColor = "white"; // 🌟 紅底配白字
             } else if (vtsData.s === 'total' || vtsData.s === 'grow' || vtsData.t === 'press' || vtsData.v === 'mid' || vtsData.v === 'low') {
                 tactic = "防禦式戰術 (Defensive)";
                 color = "var(--warning)"; 
                 tagStyle = "background-color: #000000; color: #ffeb3b;"; 
+                textColor = "black"; // 🌟 黃底配黑字
             } else {
                 tactic = "攻擊式戰術 (Offensive)";
                 color = "var(--safe)"; 
                 tagStyle = "background-color: #1b5e20; color: #ffffff;"; 
+                textColor = "black"; // 🌟 綠底配黑字
             }
 
             res.style.backgroundColor = color;
-            res.innerHTML = `建議戰術<br><span style="font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; padding: 6px 18px; border-radius: 8px; display: inline-block; margin-top: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.4); ${tagStyle}">${tactic}</span>`;
+            res.style.color = textColor; // 🌟 2. 讓整個結果框的文字顏色跟著變動
+            
+            // 🌟 3. 在「建議戰術」加上 span 確保顏色生效，並稍微加粗
+            res.innerHTML = `<span style="font-weight: 900; color: ${textColor};">建議戰術</span><br><span style="font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; padding: 6px 18px; border-radius: 8px; display: inline-block; margin-top: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.4); ${tagStyle}">${tactic}</span>`;
         }
 
         // --- Matrix Logic ---
