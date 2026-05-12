@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ISO 現場安全決策輔助工具</title>
+    <title>HCFD // 現場決策工具 (ISO)</title>
     <style>
         :root {
             --bg-color: #121212;
@@ -23,7 +23,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 0 15px 50px 15px; /* 移除上方 padding，交由 top-bar 處理 */
+            padding: 0 15px 50px 15px;
         }
 
         /* 置頂懸浮標題列 */
@@ -36,9 +36,9 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px;
-            margin: 0 -15px 20px -15px; /* 抵銷 body 的 padding 讓背景填滿寬度 */
+            margin: 0 -15px 20px -15px;
             border-bottom: 1px solid #333;
-            z-index: 1000; /* 確保浮在最上層 */
+            z-index: 1000;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
@@ -73,7 +73,7 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
 
-        /* SPE 樣式 */
+        /* 滑桿樣式 */
         .input-group { margin-bottom: 20px; }
         .input-group label { display: block; margin-bottom: 8px; font-weight: bold; }
         input[type="range"] {
@@ -84,6 +84,7 @@
         }
         .value-display { float: right; color: var(--accent-color); font-size: 1.2rem; font-weight: bold; }
 
+        /* 結果顯示框 */
         .result-box {
             text-align: center;
             padding: 15px;
@@ -94,7 +95,7 @@
             transition: all 0.3s ease;
         }
 
-        /* VTS 樣式 */
+        /* VTS 按鈕樣式 */
         .vts-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         .btn-radio {
             background: #333;
@@ -133,12 +134,11 @@
     </style>
 </head>
 <body>
-    <!-- 呼叫導覽列 -->
     {% include nav.html %}
     
-    <!-- 新增的置頂懸浮列 -->
+    <!-- 置頂標題與重置鈕 -->
     <div class="top-bar">
-        <h1>現場決策工具 (ISO)</h1>
+        <h1>HCFD // ISO 現場決策系統</h1>
         <button class="reset-btn-top" onclick="resetAll()">一鍵重置</button>
     </div>
 
@@ -157,8 +157,8 @@
             <label>暴露度 Exposure (1-10) <span id="e-val" class="value-display">5</span></label>
             <input type="range" id="e-range" min="1" max="10" value="5" oninput="calculateSPE()">
         </div>
-        <div id="spe-result" class="result-box" style="background-color: var(--warning); color: black;">
-            風險得分: 125 (中度風險)
+        <div id="spe-result" class="result-box">
+            <!-- 由 JS 動態生成 -->
         </div>
     </div>
 
@@ -186,8 +186,8 @@
             <div class="btn-radio" onclick="setVTS('s', 'total', this)">全面失控</div>
         </div>
 
-        <div id="vts-result" class="result-box" style="background-color: var(--safe); color: white; font-size: 1.1rem;">
-            建議戰術：攻擊式戰術 (Offensive)
+        <div id="vts-result" class="result-box">
+            <!-- 由 JS 動態生成 -->
         </div>
     </div>
 
@@ -224,46 +224,65 @@
             const res = document.getElementById('spe-result');
             
             let level = "";
+            let tagStyle = "";
+
             if (score < 70) {
-                level = "低風險 (可接受)";
+                level = "低風險 - 可接受";
                 res.style.backgroundColor = "var(--safe)";
                 res.style.color = "white";
+                tagStyle = "background-color: #1b5e20; color: #ffffff;"; 
             } else if (score < 200) {
-                level = "中度風險 (警戒)";
+                level = "中度風險 - 警戒";
                 res.style.backgroundColor = "var(--warning)";
                 res.style.color = "black";
+                tagStyle = "background-color: #000000; color: #ffeb3b;"; 
             } else if (score < 400) {
-                level = "高度風險 (危險)";
+                level = "高度風險 - 危險";
                 res.style.backgroundColor = "var(--accent-color)";
                 res.style.color = "white";
+                tagStyle = "background-color: #bf360c; color: #ffffff;"; 
             } else {
-                level = "極高風險 (不可接受)";
+                level = "極高風險 - 不可接受";
                 res.style.backgroundColor = "var(--extreme)";
                 res.style.color = "white";
+                tagStyle = "background-color: #ffeb3b; color: #b71c1c;"; 
             }
-            res.innerText = `風險得分: ${score} (${level})`;
+            
+            res.innerHTML = `風險得分: ${score} <br> <span style="font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; padding: 6px 18px; border-radius: 8px; display: inline-block; margin-top: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.4); ${tagStyle}">${level}</span>`;
         }
 
         // --- VTS Logic ---
         let vtsData = { v: 'high', t: 'suff', s: 'small' };
+        
         function setVTS(type, val, el) {
             vtsData[type] = val;
+            
             const parent = el.parentElement;
             Array.from(parent.children).forEach(c => c.classList.remove('active'));
             el.classList.add('active');
             
             const res = document.getElementById('vts-result');
             
-            if (vtsData.t === 'limit' || (vtsData.v === 'low' && vtsData.s === 'total')) {
-                res.innerText = "建議戰術：撤退 / 非干預 (Non-intervention)";
-                res.style.backgroundColor = "var(--extreme)";
-            } else if (vtsData.s === 'total' || vtsData.t === 'press' || vtsData.v === 'mid') {
-                res.innerText = "建議戰術：防禦式戰術 (Defensive)";
-                res.style.backgroundColor = "var(--accent-color)";
+            let tactic = "";
+            let color = "";
+            let tagStyle = "";
+
+            if (vtsData.t === 'limit' || (vtsData.v === 'low' && (vtsData.s === 'grow' || vtsData.s === 'total'))) {
+                tactic = "撤退 / 非干預 (Non-intervention)";
+                color = "var(--extreme)"; 
+                tagStyle = "background-color: #ffeb3b; color: #b71c1c;"; 
+            } else if (vtsData.s === 'total' || vtsData.s === 'grow' || vtsData.t === 'press' || vtsData.v === 'mid' || vtsData.v === 'low') {
+                tactic = "防禦式戰術 (Defensive)";
+                color = "var(--warning)"; 
+                tagStyle = "background-color: #000000; color: #ffeb3b;"; 
             } else {
-                res.innerText = "建議戰術：攻擊式戰術 (Offensive)";
-                res.style.backgroundColor = "var(--safe)";
+                tactic = "攻擊式戰術 (Offensive)";
+                color = "var(--safe)"; 
+                tagStyle = "background-color: #1b5e20; color: #ffffff;"; 
             }
+
+            res.style.backgroundColor = color;
+            res.innerHTML = `建議戰術<br><span style="font-size: 1.25rem; font-weight: 900; letter-spacing: 1px; padding: 6px 18px; border-radius: 8px; display: inline-block; margin-top: 10px; box-shadow: 0 3px 6px rgba(0,0,0,0.4); ${tagStyle}">${tactic}</span>`;
         }
 
         // --- Matrix Logic ---
@@ -273,14 +292,14 @@
             [2, 2, 3, 3, 4],
             [2, 3, 3, 4, 4],
             [3, 3, 4, 4, 5]
-        ]; // 1: Low, 5: Extreme
+        ];
 
         function initMatrix() {
             const table = document.getElementById('risk-table');
             let html = "";
-            for (let i = 5; i >= 1; i--) { // Severity Rows
+            for (let i = 5; i >= 1; i--) { 
                 html += "<tr>";
-                for (let j = 1; j <= 5; j++) { // Probability Cols
+                for (let j = 1; j <= 5; j++) { 
                     const level = matrixData[i-1][j-1];
                     let color = "";
                     let label = "";
@@ -304,42 +323,40 @@
             document.getElementById('m-p-val').innerText = p;
             document.getElementById('m-s-val').innerText = s;
 
-            // Clear previous highlight
             document.querySelectorAll('td').forEach(td => td.classList.remove('active-cell'));
             
-            // Add highlight
             const active = document.getElementById(`cell-${p}-${s}`);
             if (active) active.classList.add('active-cell');
         }
 
-        // --- 安全的重置功能 ---
+        // --- Reset Logic ---
         function resetAll() {
-            // 1. 重置 SPE 滑桿至中間值 (5)
+            // SPE 重置
             document.getElementById('s-range').value = 5;
             document.getElementById('p-range').value = 5;
             document.getElementById('e-range').value = 5;
             calculateSPE();
 
-            // 2. 重置 VTS 按鈕至最左側預設值
+            // VTS 重置
             setVTS('v', 'high', document.getElementById('v-group').children[0]);
             setVTS('t', 'suff', document.getElementById('t-group').children[0]);
             setVTS('s', 'small', document.getElementById('s-group').children[0]);
 
-            // 3. 重置 5x5 矩陣滑桿至中間值 (3)
+            // Matrix 重置
             document.getElementById('m-p-range').value = 3;
             document.getElementById('m-s-range').value = 3;
             updateMatrix();
 
-            // 將畫面平滑捲動回最上方
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Initialize on load
+        // --- Initialize ---
         window.onload = () => {
             initMatrix();
             calculateSPE();
+            // 觸發 VTS 預設運算顯示
+            setVTS('v', 'high', document.getElementById('v-group').children[0]);
         };
     </script>
 </body>
 </html>
-
