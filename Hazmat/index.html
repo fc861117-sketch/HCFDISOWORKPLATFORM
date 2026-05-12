@@ -180,17 +180,18 @@
         .warn-high { border-left-color: var(--danger); }
         .warn-high .data-value { color: #ff5252; }
 
-        .ghs-badge {
+.ghs-badge {
             display: inline-block;
             background: #fff;
             color: black;
             border: 2px solid red;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 6px 12px; /* 增加左右間距 */
+            border-radius: 6px;
             font-weight: bold;
-            font-size: 0.9rem;
-            margin-right: 5px;
-            margin-bottom: 5px;
+            font-size: 1rem; /* 稍微放大字體 */
+            margin-right: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5); /* 增加陰影使其立體 */
         }
         .class-badge {
             display: inline-block;
@@ -436,6 +437,7 @@ const db = [
             }
         }
 
+// --- 顯示詳細資料 (含 GHS 文字轉換邏輯) ---
         function showDetail(item) {
             inputEl.value = item.nameTW;
             resultsEl.style.display = 'none';
@@ -451,13 +453,32 @@ const db = [
             document.getElementById('nfpa-r').innerText = item.nfpa.r;
             document.getElementById('nfpa-s').innerHTML = item.nfpa.s || "-";
 
+            // 🌟 GHS 圖示與文字對照表
+            const ghsMap = {
+                "🔥": "易燃物",
+                "⭕": "氧化性",
+                "💣": "爆炸物",
+                "💥": "爆炸物",
+                "💨": "加壓氣體",
+                "🧪": "腐蝕性",
+                "☢️": "腐蝕性",
+                "☠️": "急毒性",
+                "⚠️": "警告/刺激",
+                "👤": "健康危害",
+                "🐟": "環境危害"
+            };
+
             const ghsBox = document.getElementById('d-ghs');
             ghsBox.innerHTML = '';
-            // 優化：處理包含逗號的 GHS 字串，切割成獨立 Badge
+            
+            // 處理包含逗號的 GHS 字串
             const ghsArray = item.ghs[0].split(',');
             ghsArray.forEach(g => {
-                if(g.trim()){
-                    ghsBox.innerHTML += `<span class="ghs-badge">${g.trim()}</span>`;
+                const icon = g.trim();
+                if(icon){
+                    // 根據圖示抓取文字，若抓不到則只顯示圖示
+                    const text = ghsMap[icon] || "";
+                    ghsBox.innerHTML += `<span class="ghs-badge">${icon} ${text}</span>`;
                 }
             });
 
@@ -465,6 +486,7 @@ const db = [
             document.getElementById('d-iso').innerText = item.isolation;
             document.getElementById('d-tactics').innerText = item.tactics;
             document.getElementById('d-ppe').innerText = item.ppe;
+            
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
