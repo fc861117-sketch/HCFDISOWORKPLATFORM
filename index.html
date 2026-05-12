@@ -5,16 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>新竹縣政府消防局ISO作業平台</title>
+    <title>新竹縣消防局ISO作業平台</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root { --primary: #d32f2f; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --accent: #ffb74d; --medic: #4caf50; }
         body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; padding-bottom: 100px; }
         
-        /* 網頁專屬浮水印：移至最上層且不阻擋點擊 */
+        /* 網頁專屬背景浮水印 (不阻擋點擊，匯出圖檔不會有) */
         .page-watermark { 
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); 
-            font-size: 60px; font-weight: 900; color: rgba(255, 255, 255, 0.08); 
+            font-size: 60px; font-weight: 900; color: rgba(255, 255, 255, 0.05); 
             z-index: 9999; pointer-events: none; user-select: none; white-space: nowrap; letter-spacing: 5px; 
         }
 
@@ -82,7 +82,7 @@
 
         #sysToast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 30px; font-size: 15px; font-weight: bold; z-index: 999999; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: center; white-space: nowrap; }
 
-        /* 導出圖檔模板：加深字體、高對比度 */
+        /* 導出圖檔模板：加深字體、高對比度 (無浮水印) */
         #exportTemplate { position: absolute; left: -9999px; top: -9999px; width: 1000px; background: #ffffff; color: #000000; padding: 40px; box-sizing: border-box; font-family: "微軟正黑體", sans-serif; overflow: hidden; }
         .export-content { position: relative; z-index: 1; }
         .export-header { text-align: center; font-size: 34px; font-weight: 900; margin-bottom: 25px; border-bottom: 5px solid #d32f2f; padding-bottom: 10px; color:#d32f2f;}
@@ -101,10 +101,9 @@
     </style>
 </head>
 <body>
-    <!-- 呼叫導覽列 -->
-    {% include nav.html %}
+{% include nav.html %}
     
-<div class="page-watermark">powered by 單柏洋</div>
+<div class="page-watermark">made by 單柏洋</div>
 
 <div id="sysToast">✅ 系統提示</div>
 <div id="autoSyncIndicator" style="position:fixed; top:20px; right:20px; background:#4caf50; color:white; padding:8px 15px; border-radius:20px; font-size:14px; font-weight:bold; display:none; z-index:99999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">🔄 雲端同步完成</div>
@@ -124,7 +123,7 @@
         <h2 style="color:var(--accent);">雲端救災專案列表</h2>
         <label style="color:#ff5252; font-weight:bold; overflow:visible;">⚠️ 載入專案前必填</label>
         <input type="text" id="modifierName" placeholder="請輸入您的姓名 (操作人員)..." style="margin-bottom:10px; border: 2px solid #ff5252;">
-        <button class="btn-main" style="background:#555; height: 48px; min-height: 48px;" onclick="renderHome()">↻ 重新整理雲端列表</button>
+        <button class="btn-main" style="background:#555; height: 48px; min-height: 48px; font-size: 1rem; border-radius:6px; padding:0;" onclick="renderHome()">↻ 重新整理雲端列表</button>
         <div id="projectListContainer" style="text-align: center; padding: 10px; color:#aaa;">正在讀取雲端資料庫...</div>
     </div>
 </div>
@@ -241,9 +240,12 @@
             <div class="compass-container">
                 <div class="compass-target"></div>
                 <div class="compass-rose" id="compassRose">
-                    <div class="compass-mark mark-n">N</div><div class="compass-mark mark-e">E</div>
-                    <div class="compass-mark mark-s">S</div><div class="compass-mark mark-w">W</div>
-                    <div class="compass-needle-n"></div><div class="compass-needle-s"></div>
+                    <div class="compass-mark mark-n">N</div>
+                    <div class="compass-mark mark-e">E</div>
+                    <div class="compass-mark mark-s">S</div>
+                    <div class="compass-mark mark-w">W</div>
+                    <div class="compass-needle-n"></div>
+                    <div class="compass-needle-s"></div>
                     <div class="compass-center"></div>
                 </div>
             </div>
@@ -268,14 +270,20 @@
     </div>
 
     <button class="btn-main btn-sync-brief" onclick="syncBriefingToCloud()" style="background:#4caf50; margin-top:20px;">☁️ 儲存並同步【簡報表】至雲端</button>
-    <button id="btnExportImage" class="btn-main" onclick="exportToImage()" style="background:#2196F3; margin-top:10px;">📸 匯出最佳格式圖檔</button>
+    <button id="btnExportImage" class="btn-main btn-export" onclick="exportToImage()" style="background:#2196F3; margin-top:10px;">📸 匯出最佳格式圖檔</button>
 </div>
 
 <div id="page-medic" class="page">
     <div class="card" style="border-left-color: var(--medic);">
         <h2 style="color:var(--medic);">新增 MEDIC 資料</h2>
-        <div class="row-full"><label>時間 <span style="color:#ff5252; font-weight:bold;">*必填</span></label><input type="time" id="m_time"></div>
-        <div class="row-full"><label>監控環境與行動 (M) <span style="color:#ff5252; font-weight:bold;">*必填 (加入後無法修改)</span></label><textarea id="m_m" placeholder="偵測的地點或區域..."></textarea></div>
+        <div class="row-full">
+            <label>時間 <span style="color:#ff5252; font-weight:bold;">*必填</span></label>
+            <input type="time" id="m_time">
+        </div>
+        <div class="row-full">
+            <label>監控環境與行動 (M) <span style="color:#ff5252; font-weight:bold;">*必填 (加入後無法修改)</span></label>
+            <textarea id="m_m" placeholder="偵測的地點或區域..."></textarea>
+        </div>
         <label>評估潛在危險 (E)</label><textarea id="m_e"></textarea>
         <label>預防措施 (D)</label><textarea id="m_d"></textarea>
         <label>介入 (I)</label><textarea id="m_i"></textarea>
@@ -500,10 +508,10 @@
             <div style="background:#252525; padding:15px; border-radius:8px; margin-bottom:15px; border:1px solid #444;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                     <h3 style="margin:0; color:#ff5252;">${face}</h3>
-                    <label class="photo-upload-btn">📸 現場拍照<input type="file" accept="image/*" capture="environment" style="display:none;" onchange="uploadReconPhoto(${idx}, this)"></label>
+                    <label class="photo-upload-btn">📸 拍照 / 選照片<input type="file" accept="image/*" style="display:none;" onchange="uploadReconPhoto(${idx}, this)"></label>
                 </div>
                 <input type="hidden" id="r_${idx}_photo_url"><input type="hidden" id="r_${idx}_photo_id"><input type="hidden" id="r_${idx}_photo_formula">
-                <div id="r_${idx}_photo_status" style="font-size:13px; text-align:right; margin-bottom:10px; word-break:break-all;"></div>
+                <div id="r_${idx}_photo_status" style="font-size:13px; text-align:center; margin-bottom:10px;"></div>
                 <div class="grid-2">
                     <div><label>樓層數</label><select id="r_${idx}_floor" class="floor-select"></select></div>
                     <div><label>消防組數</label><select id="r_${idx}_teams" class="num-select"></select></div>
@@ -545,8 +553,14 @@
                     body: JSON.stringify({ action: 'uploadPhoto', projectName: currentProject, filename: `R_${idx}_${Date.now()}.jpg`, mimeType: 'image/jpeg', base64: base64Data }), redirect: 'follow'
                 }).then(r=>r.json()).then(res => {
                     if (res.error) { showToast("❌ 系統錯誤", "error"); return statusEl.innerHTML = `<span style='color:#d32f2f;'>❌ 系統錯誤</span>`; }
-                    document.getElementById(`r_${idx}_photo_url`).value = res.url; document.getElementById(`r_${idx}_photo_formula`).value = res.formula;
-                    statusEl.innerHTML = `<a href="${res.url}" target="_blank" style="color:#4caf50; text-decoration:underline; font-weight:bold;">🔗 點此查看雲端照片</a>`;
+                    document.getElementById(`r_${idx}_photo_url`).value = res.url; document.getElementById(`r_${idx}_photo_id`).value = res.fileId; document.getElementById(`r_${idx}_photo_formula`).value = res.formula;
+                    
+                    let rawImgUrl = `https://lh3.googleusercontent.com/d/${res.fileId}`;
+                    
+                    statusEl.innerHTML = `
+                        <img src="${rawImgUrl}" style="max-width:100%; max-height:180px; border-radius:6px; margin-top:5px; border:1px solid #555; object-fit:cover;">
+                        <div style="margin-top:5px;"><a href="${res.url}" target="_blank" style="color:#4caf50; text-decoration:underline; font-weight:bold; font-size:13px;">🔗 開啟原始大圖</a></div>
+                    `;
                     saveBriefingToLocal(); showToast(`✅ 第${idx+1}面照片上傳成功！`, "success");
                 }).catch(err => { statusEl.innerHTML = `<span style='color:#d32f2f;'>❌ 上傳失敗，請確認網路</span>`; showToast("❌ 照片上傳異常", "error"); });
             }; img.src = e.target.result;
@@ -643,7 +657,19 @@
                 });
 
                 for(let i=0; i<4; i++) {
-                    if (db[name].briefing[`r_${i}_photo_url`] && db[name].briefing[`r_${i}_photo_url`] !== "") { document.getElementById(`r_${i}_photo_status`).innerHTML = `<a href="${db[name].briefing[`r_${i}_photo_url`]}" target="_blank" style="color:#4caf50; text-decoration:underline; font-weight:bold;">🔗 點此查看雲端照片</a>`; }
+                    const pUrl = db[name].briefing[`r_${i}_photo_url`];
+                    const pId = db[name].briefing[`r_${i}_photo_id`];
+                    if (pUrl && pUrl !== "") {
+                        let extractedId = pId;
+                        if (!extractedId && pUrl.includes('/d/')) { extractedId = pUrl.split('/d/')[1].split('/')[0]; }
+                        else if (!extractedId && pUrl.includes('id=')) { extractedId = pUrl.split('id=')[1].split('&')[0]; }
+                        let rawImgUrl = extractedId ? `https://lh3.googleusercontent.com/d/${extractedId}` : pUrl;
+                        
+                        document.getElementById(`r_${i}_photo_status`).innerHTML = `
+                            <img src="${rawImgUrl}" style="max-width:100%; max-height:180px; border-radius:6px; margin-top:5px; border:1px solid #555; object-fit:cover;">
+                            <div style="margin-top:5px;"><a href="${pUrl}" target="_blank" style="color:#4caf50; text-decoration:underline; font-weight:bold; font-size:13px;">🔗 開啟原始大圖</a></div>
+                        `;
+                    }
                 }
             }
             if(!document.getElementById('b_iso').value && db[name] && db[name].creator) document.getElementById('b_iso').value = db[name].creator;
@@ -713,6 +739,7 @@
         } catch (e) { showToast("❌ 單筆同步失敗: " + e.message, "error"); }
     }
 
+    // ─── 匯出最佳格式圖檔 (高對比度, 無背景浮水印) ───
     function exportToImage() {
         if (!currentProject) return showToast("⚠️ 請先開啟專案！", "error"); 
         saveBriefingToLocal(); 
