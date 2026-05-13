@@ -28,6 +28,37 @@
             background-repeat: repeat;
         }
 
+        /* 運輸分類卡片樣式 */
+/* 運輸分類卡片樣式 (純靜態展示版) */
+        .class-card {
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 10px 5px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            /* 已經移除 cursor 與 hover 特效，讓它變成純圖卡 */
+        }
+        .class-card img {
+            width: 55px;
+            height: 55px;
+            /* 🌟 終極解法：強制加上白底，並用 clip-path 裁切成完美的菱形 */
+            background-color: #FFFFFF;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            /* 加上陰影讓圖示更有立體感 */
+            filter: drop-shadow(2px 3px 5px rgba(0,0,0,0.6));
+            margin-bottom: 5px;
+        }
+        .class-card-text {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #ccc;
+            line-height: 1.2;
+        }
          /* 網頁專屬背景浮水印 (滿版排列小字體) */
         .page-watermark { 
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -213,47 +244,46 @@
             </div>
 
             <!-- Tab 1: 完美呈現的 UN 分類菱形牌 -->
-            <div id="un-tab" class="ref-content active">
-                <div class="class-ref-grid">
-                    <div class="class-item">
-                        <div class="un-diamond un-c1"><div class="un-content"><div class="un-sym">💥</div><div class="un-num">1</div></div></div>
-                        <span>第 1 類<br>爆炸物</span>
+<div id="un-tab" class="ref-content active">
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px;">
+                    <div class="class-card">
+                        <img src="img/class_1.svg" alt="Class 1">
+                        <div class="class-card-text">第 1 類<br>爆炸物</div>
                     </div>
-                    <div class="class-item">
-                        <div class="un-diamond un-c2"><div class="un-content"><div class="un-sym">💨</div><div class="un-num">2</div></div></div>
-                        <span>第 2 類<br>氣體</span>
+                    <div class="class-card">
+                        <img src="img/class_2.2.svg" alt="Class 2">
+                        <div class="class-card-text">第 2 類<br>氣體</div>
                     </div>
-                    <div class="class-item">
-                        <div class="un-diamond un-c3"><div class="un-content"><div class="un-sym">🔥</div><div class="un-num">3</div></div></div>
-                        <span style="color:#f44336;">第 3 類<br>易燃液體</span>
+                    <div class="class-card">
+                        <img src="img/class_3.svg" alt="Class 3">
+                        <div class="class-card-text">第 3 類<br>易燃液體</div>
                     </div>
-                    <div class="class-item">
-                        <div class="un-diamond un-c4"><div class="un-content"><div class="un-sym">🔥</div><div class="un-num">4</div></div></div>
-                        <span style="color:#ff9800;">第 4 類<br>易燃固體</span>
+                    <div class="class-card">
+                        <img src="img/class_4.1.svg" alt="Class 4">
+                        <div class="class-card-text">第 4 類<br>易燃固體</div>
                     </div>
-                    <div class="class-item">
-                        <div class="un-diamond un-c5"><div class="un-content"><div class="un-sym">⭕</div><div class="un-num">5</div></div></div>
-                        <span style="color:#ffeb3b;">第 5 類<br>氧化物質</span>
+                    <div class="class-card">
+                        <img src="img/class_5.1.svg" alt="Class 5">
+                        <div class="class-card-text">第 5 類<br>氧化物質</div>
                     </div>
-                    <div class="class-item">
-                        <div class="un-diamond un-c6"><div class="un-content"><div class="un-sym">☠️</div><div class="un-num">6</div></div></div>
-                        <span>第 6 類<br>毒性/感染</span>
+                    <div class="class-card">
+                        <img src="img/class_6.1.svg" alt="Class 6">
+                        <div class="class-card-text">第 6 類<br>毒性/感染</div>
                     </div>
-                    <div class="class-item">
-                        <div class="un-diamond un-c7"><div class="un-content"><div class="un-sym">☢️</div><div class="un-num">7</div></div></div>
-                        <span style="color:#ffeb3b;">第 7 類<br>放射性</span>
+                    <div class="class-card">
+                        <img src="img/class_7.svg" alt="Class 7">
+                        <div class="class-card-text">第 7 類<br>放射性</div>
                     </div>
-                    <div class="class-item">
-                        <div class="un-diamond un-c8"><div class="un-content"><div class="un-sym">🧪</div><div class="un-num">8</div></div></div>
-                        <span>第 8 類<br>腐蝕性</span>
+                    <div class="class-card">
+                        <img src="img/class_8.svg" alt="Class 8">
+                        <div class="class-card-text">第 8 類<br>腐蝕性</div>
                     </div>
-                    <div class="class-item">
-                        <div class="un-diamond un-c9"><div class="un-content"><div class="un-sym">⚠️</div><div class="un-num">9</div></div></div>
-                        <span>第 9 類<br>其他危害</span>
+                    <div class="class-card">
+                        <img src="img/class_9.svg" alt="Class 9">
+                        <div class="class-card-text">第 9 類<br>其他危害</div>
                     </div>
                 </div>
             </div>
-
             <!-- Tab 2: 台灣六類公共危險物品 -->
             <div id="tw-tab" class="ref-content">
                 <div style="display:flex; flex-direction:column; gap:8px;">
@@ -339,7 +369,6 @@
                 <div class="nfpa-quad" id="nfpa-r" style="background:#ffeb3b; bottom:0; left:0; border:1px solid #fff;"></div>
                 <div class="nfpa-quad" id="nfpa-s" style="background:#fff; bottom:0; right:0; border:1px solid #fff;"></div>
             </div>
-            <div style="font-size:0.8rem; color:#aaa;">紅:易燃 | 藍:健康<br>黃:反應 | 白:特殊</div>
         </div>
         <div class="data-row"><div class="data-label">GHS 危害標示</div><div id="d-ghs"></div></div>
         <div class="data-row"><div class="data-label">ERG 指南 | 初期隔離</div><div class="data-value">Guide <span id="d-guide"></span> | <span id="d-iso" style="color:var(--danger);"></span></div></div>
@@ -362,7 +391,7 @@
             event.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
         }
-
+        
         function handleSearch() {
             const query = inputEl.value.trim().toLowerCase();
             resultsEl.innerHTML = '';
@@ -399,41 +428,93 @@
         }
 
         function showDetail(item) {
+            // 切換畫面
             detailEl.style.display = 'block';
             document.getElementById('main-card').style.display = 'none';
             
+            // 🌟 1. 恢復乾淨的基本資訊 (把 Class 補回來，讓「類別:」後面不會空白！)
             document.getElementById('d-name').innerText = `[UN ${item.un}] ${item.nameTW}`;
             document.getElementById('d-cas').innerText = item.cas || "N/A";
-            document.getElementById('d-class').innerText = `Class ${item.class}`;
-            document.getElementById('nfpa-f').innerText = item.nfpa.f;
-            document.getElementById('nfpa-h').innerText = item.nfpa.h;
-            document.getElementById('nfpa-r').innerText = item.nfpa.r;
-            document.getElementById('nfpa-s').innerText = item.nfpa.s || "-";
+            document.getElementById('d-class').innerText = `Class ${item.class}`; 
+            
+            // 2. 隱藏舊的十字形 NFPA 數字欄位
+            ['nfpa-f', 'nfpa-h', 'nfpa-r', 'nfpa-s'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el && el.parentElement) el.parentElement.style.display = 'none';
+            });
 
+            // 🌟 3. 真實 SVG 圖片資料庫讀取
+            const cStr = String(item.class);
+            const imgSrc = `img/class_${cStr}.svg`; 
+            const fallbackSrc = `img/class_${cStr.charAt(0)}.svg`;
+           // 🌟 將讀取出來的 SVG 圖片直接加上實心白底與菱形遮罩
+            const imgHtml = `<img src="${imgSrc}" onerror="this.onerror=null; this.src='${fallbackSrc}';" style="width:70px; height:70px; background-color: #FFFFFF; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.8));" alt="Class ${cStr}">`;
+
+            // 🌟 4. 建立左右並排的視覺儀表板
+            const classSpan = document.getElementById('d-class');
+            if (classSpan && classSpan.parentElement) {
+                let visBox = document.getElementById('hcfd-visual-dashboard');
+                if (!visBox) {
+                    visBox = document.createElement('div');
+                    visBox.id = 'hcfd-visual-dashboard';
+                    classSpan.parentElement.insertAdjacentElement('afterend', visBox);
+                }
+                
+                visBox.innerHTML = `
+                    <div style="display:flex; flex-wrap:wrap; justify-content:space-around; align-items:center; background:#1e1e1e; padding:15px; margin:15px 0; border-radius:8px; border:1px solid #444; box-shadow:0 4px 8px rgba(0,0,0,0.5);">
+                        
+                        <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+                            ${imgHtml}
+                            <span style="font-size:1rem; font-weight:bold; color:#ff9800; background:#111; padding:3px 8px; border-radius:4px; box-shadow:inset 0 0 3px rgba(255,152,0,0.3);">Class ${item.class}</span>
+                        </div>
+
+                        <div style="display:flex; align-items:center; gap:20px;">
+                            <div style="position:relative; width:60px; height:60px; transform:rotate(45deg); box-shadow: 2px 2px 6px rgba(0,0,0,0.6); flex-shrink:0;">
+                                <div style="position:absolute; top:0; left:0; width:30px; height:30px; background:#F44336; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.f}</span></div>
+                                <div style="position:absolute; top:30px; left:0; width:30px; height:30px; background:#2196F3; color:white; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.h}</span></div>
+                                <div style="position:absolute; top:0; left:30px; width:30px; height:30px; background:#FFEB3B; color:black; display:flex; justify-content:center; align-items:center; font-weight:900; font-size:1.1rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.r}</span></div>
+                                <div style="position:absolute; top:30px; left:30px; width:30px; height:30px; background:#FFFFFF; color:black; display:flex; justify-content:center; align-items:center; font-weight:bold; font-size:0.85rem; border:1px solid #111;"><span style="transform:rotate(-45deg);">${item.nfpa.s || ''}</span></div>
+                            </div>
+                            
+                            <div style="display:flex; flex-direction:column; gap:6px; font-size:0.95rem; font-weight:bold; color:#ccc;">
+                                <div><span style="color:#F44336;">紅:易燃</span> | <span style="color:#2196F3;">藍:健康</span></div>
+                                <div><span style="color:#FFEB3B;">黃:反應</span> | <span style="color:#fff;">白:特殊</span></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 5. GHS 危害標示 (附帶放射性自動校正機制)
             const ghsMap = {
                 "🔥": "易燃物", "⭕": "氧化性", "💣": "爆炸物", "💥": "爆炸物", 
-                "💨": "加壓氣體", "☢️": "放射性", "🧪": "腐蝕性", "☠️": "急毒性", 
+                "💨": "加壓氣體", "🧪": "腐蝕性", "☢️": "放射性", "☠️": "急毒性", 
                 "⚠️": "警告/刺激", "👤": "健康危害", "🐟": "環境危害"
             };
 
             const ghsBox = document.getElementById('d-ghs');
-            ghsBox.innerHTML = '';
-            item.ghs[0].split(',').forEach(g => {
-                const icon = g.trim();
-                if(icon) {
-                    const text = ghsMap[icon] || "";
-                    ghsBox.innerHTML += `<span class="ghs-badge">${icon} ${text}</span>`;
-                }
-            });
+            if (ghsBox) {
+                ghsBox.innerHTML = '';
+                item.ghs[0].split(',').forEach(g => {
+                    let icon = g.trim();
+                    if (icon === "☢️" && item.class !== "7") icon = "🧪"; // 校正防呆
+                    if(icon) {
+                        const text = ghsMap[icon] || "";
+                        ghsBox.innerHTML += `<span class="ghs-badge">${icon} ${text}</span>`;
+                    }
+                });
+            }
 
-            // 🌟 將純文字替換為可點擊的連結標籤
-            document.getElementById('d-guide').innerHTML = `<span class="guide-link" onclick="showErgGuide('${item.erg}')">${item.erg} 👆</span>`;
-            document.getElementById('d-iso').innerText = item.isolation;
-            document.getElementById('d-tactics').innerText = item.tactics;
-            document.getElementById('d-ppe').innerText = item.ppe;
+            // 6. 其他戰術資訊與 ERG 動態點擊
+            const dGuide = document.getElementById('d-guide');
+            if (dGuide) dGuide.innerHTML = `<span class="guide-link" onclick="showErgGuide('${item.erg}')">${item.erg} 👆</span>`;
+            
+            if(document.getElementById('d-iso')) document.getElementById('d-iso').innerText = item.isolation;
+            if(document.getElementById('d-tactics')) document.getElementById('d-tactics').innerText = item.tactics;
+            if(document.getElementById('d-ppe')) document.getElementById('d-ppe').innerText = item.ppe;
             window.scrollTo(0,0);
         }
-
+        
         function resetSearch() {
             inputEl.value = '';
             detailEl.style.display = 'none';
@@ -728,5 +809,7 @@
             </div>
         </div>
     </div>
+</body>
+</html>
 </body>
 </html>
