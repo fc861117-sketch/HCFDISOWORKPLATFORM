@@ -118,8 +118,8 @@
     <div class="card">
         <h2>建立新專案</h2>
         <div class="grid-2">
-            <div><label>案名 <span style="color:#ff5252;">*必填</span></label><input type="text" id="newProjectName" placeholder="例如: 湖口火警"></div>
-            <div><label>ISO姓名 <span style="color:#ff5252;">*必填</span></label><input type="text" id="newProjectCreator" placeholder="姓名..."></div>
+            <div><label>案名 <span style="color:#ff5252;">*必填</span></label><input type="text" id="newProjectName" placeholder="例如: 1150101湖口住宅火警"></div>
+            <div><label>ISO姓名 <span style="color:#ff5252;">*必填</span></label><input type="text" id="newProjectCreator" placeholder="單位+姓名"></div>
         </div>
         <button id="btnCreateProject" class="btn-main" style="background:var(--primary);" onclick="confirmAction(this, createNewProject)">建立新專案</button>
     </div>
@@ -626,7 +626,8 @@ async function executeFinishCase() {
                     if (res.error) { showToast("❌ 系統錯誤", "error"); return statusEl.innerHTML = `<span style='color:#d32f2f;'>❌ 系統錯誤</span>`; }
                     document.getElementById(`r_${idx}_photo_url`).value = res.url; document.getElementById(`r_${idx}_photo_id`).value = res.fileId; document.getElementById(`r_${idx}_photo_formula`).value = res.formula;
                     
-                    let rawImgUrl = `https://drive.google.com/uc?export=view&id=${res.fileId}`;
+                    // sz=w800 代表請求寬度最大為 800px 的縮圖，載入速度更快且不會破圖
+                    let rawImgUrl = `https://drive.google.com/thumbnail?id=${res.fileId}&sz=w800`;
                     
                     statusEl.innerHTML = `
                         <img src="${rawImgUrl}" style="max-width:100%; max-height:180px; border-radius:6px; margin-top:5px; border:1px solid #555; object-fit:cover;">
@@ -744,7 +745,7 @@ async function executeFinishCase() {
                         let extractedId = pId;
                         if (!extractedId && pUrl.includes('/d/')) { extractedId = pUrl.split('/d/')[1].split('/')[0]; }
                         else if (!extractedId && pUrl.includes('id=')) { extractedId = pUrl.split('id=')[1].split('&')[0]; }
-                        let rawImgUrl = extractedId ? `https://drive.google.com/uc?export=view&id=${extractedId}` : pUrl;
+                        let rawImgUrl = extractedId ? `https://drive.google.com/thumbnail?id=${extractedId}&sz=w800` : pUrl;
                         
                         document.getElementById(`r_${i}_photo_status`).innerHTML = `
                             <img src="${rawImgUrl}" style="max-width:100%; max-height:180px; border-radius:6px; margin-top:5px; border:1px solid #555; object-fit:cover;">
@@ -1011,6 +1012,10 @@ function renderLocalHomeFallback() {
         ['time','e','d','i','c'].forEach(f => { const el = document.getElementById(`med_${f.charAt(0)}_${index}`); if(el) db[currentProject].medic[index][f] = el.value; }); saveDB();
     }
 
+    initSelects(); renderHome();
+</script>
+</body>
+</html>
     initSelects(); renderHome();
 </script>
 </body>
