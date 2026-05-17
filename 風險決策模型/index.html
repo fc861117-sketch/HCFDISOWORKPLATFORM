@@ -131,6 +131,24 @@
             font-weight: bold;
             font-size: 0.9rem;
         }
+        /* 免責聲明與警語區塊 */
+.disclaimer-box {
+    background-color: rgba(244, 67, 54, 0.1); 
+    border-left: 4px solid var(--danger);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #ccc;
+}
+
+.disclaimer-box strong {
+    color: var(--danger);
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
     </style>
 </head>
 <body>
@@ -208,7 +226,17 @@
             </table>
         </div>
     </div>
+</div>
 
+    <div class="disclaimer-box">
+        <strong>⚠️ 決策模型使用警語與免責聲明</strong>
+        本平台提供之 SPE、VTS 及風險矩陣模型，均為基於理論架構之「輔助性運算工具」。<br><br>
+        實際災害現場瞬息萬變，系統給出之「風險等級」與「戰術建議（攻擊/防禦/撤退）」僅供指揮官 (IC) 及事故安全官 (ISO) 參考，絕不可完全取代現場專業人員之視覺判斷、經驗評估與現行之標準作業程序 (SOP)。依賴本模型所作之任何戰術決策，風險由使用者自行承擔。
+    </div>
+
+<script>
+// --- SPE Logic ---
+function calculateSPE() {
     <script>
         // --- SPE Logic ---
         function calculateSPE() {
